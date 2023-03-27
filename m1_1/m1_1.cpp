@@ -43,7 +43,37 @@ void mostrar_lista(LDE lde, string frase)
     No *aux = lde.inicio;
     while (aux != nullptr)
     {
-        cout << aux->coeficiente << aux->letra << "^" << aux->exp << " ";
+        // Formata os monomios
+        if (aux == lde.inicio)
+        {
+            if (aux->coeficiente != 0)
+            {
+                cout << aux->coeficiente;
+            }
+        }
+        else
+        {
+            if (aux->coeficiente != 0)
+            {
+                if (aux->coeficiente > 0)
+                    cout << "+ " << aux->coeficiente;
+                else
+                    cout << "- " << -aux->coeficiente;
+            }
+        }
+
+        if (aux->exp != 0)
+        {
+            cout << aux->letra;
+            cout << "^";
+            if (aux->exp > 0)
+                cout << aux->exp;
+            else
+                cout << aux->exp;
+        }
+
+        cout << " ";
+
         aux = aux->eloP;
     }
 }
