@@ -12,8 +12,8 @@ using namespace std;
 
 struct No
 {
-    float coeficiente;
     char letra;
+    float coeficiente;
     int exp;
     No *eloP;
     No *eloA;
@@ -59,19 +59,12 @@ void mostrar_lista(LDE lde, string frase)
         }
         else
         {
-            if (aux->coeficiente != 0 && aux->coeficiente != 1 && aux->coeficiente != -1)
+            if (aux->coeficiente != 0 && aux->coeficiente != 1)
             {
                 if (aux->coeficiente > 1)
                     cout << "+ " << aux->coeficiente;
                 else
                     cout << "- " << -aux->coeficiente;
-            }
-            else
-            {
-                if (aux->coeficiente > 0)
-                    cout << "+ ";
-                else
-                    cout << "- ";
             }
         }
 
@@ -373,62 +366,6 @@ float valor_numerico(LDE polinomio, float valor_real)
 }
 #pragma endregion FUNCOES_AVANCADAS
 
-string remove_espacos(string str)
-{
-    string sem_espacos;
-    for (char letra : str)
-    {
-        if (!isspace(letra))
-        {
-            sem_espacos += letra;
-        }
-    }
-
-    return sem_espacos;
-}
-
-void solicita_input_polinomio(LDE &polinomio)
-{
-    string input_polinomio = "4x^2 - x^1 - 5";
-
-    cout << "Digite um polinomio (Ex: 4x^2 + x^1 - 5): ";
-    getline(cin, input_polinomio);
-
-    input_polinomio = remove_espacos(input_polinomio);
-
-    regex padrao_regex("(-?\\d*(\\.\\d+)?)?([a-zA-Z])\\^?(-?\\d+)?|(-?\\d+(\\.\\d+)?)");
-    smatch valor_encontrado;
-
-    while (regex_search(input_polinomio, valor_encontrado, padrao_regex))
-    {
-        string coeficiente = valor_encontrado[1];
-        string letra = valor_encontrado[3];
-        string expoente = valor_encontrado[4];
-        string constante = valor_encontrado[5];
-
-        if (!constante.empty())
-        {
-            coeficiente = "1";
-            letra = "";
-            expoente = "1";
-            inserir_ordenado(polinomio, stof(constante), letra[0], stoi(expoente));
-        }
-        else
-        {
-            if (coeficiente.empty())
-                coeficiente = "1";
-            else if (coeficiente == "-")
-                coeficiente = "-1";
-
-            if (expoente.empty())
-                expoente = "1";
-            inserir_ordenado(polinomio, stof(coeficiente), letra[0], stoi(expoente));
-        }
-
-        input_polinomio = valor_encontrado.suffix().str(); // Tenta encontrar a proxima string que entra no padrão regex
-    }
-}
-
 int main()
 {
 #pragma region TESTES
@@ -547,89 +484,6 @@ int main()
 // cout << endl;
 // END: Teste Valor Numerico
 #pragma endregion TESTES
-
-    LDE polinomio_teste;
-    inicializar(polinomio_teste);
-    solicita_input_polinomio(polinomio_teste);
-    mostrar_lista(polinomio_teste, "POlinomio teste");
-    cout << endl;
-
-    string menu = "//////////////////////////////////////////////////////////\n"
-                  "//\t\t\tHP12C-no-rpn\t\t\t//\n"
-                  "//\t\t\t\t\t\t\t//\n"
-                  "//\t\t\t\t\t\t\t//\n"
-                  "// Escolha a operação [1-6]\t\t\t\t//\n"
-                  "// 1) Valor Numerico\t\t\t\t\t//\n"
-                  "// 2) Somar Polinomios\t\t\t\t\t//\n"
-                  "// 3) Subtrait Polonomios\t\t\t\t//\n"
-                  "// 4) Multiplicacao Escalar\t\t\t\t//\n"
-                  "// 5) Multiplicacao de Polinomios\t\t\t//\n"
-                  "// 6) Sair\t\t\t\t\t\t//\n"
-                  "//\t\t\t\t\t\t\t//\n"
-                  "//////////////////////////////////////////////////////////\n";
-
-    cout << menu;
-    int input_usuario;
-    do
-    {
-        cout << "Qual operacao deseja fazer? ";
-        cin >> input_usuario;
-    } while (input_usuario < 1 || input_usuario > 6);
-
-    switch (input_usuario)
-    {
-    case 1:
-        LDE polinomio_1;
-        float valor_real;
-
-        // FUNCAO PARA SOLICITAR POLINOMI
-        solicita_input_polinomio(polinomio_1);
-
-        cout << "Digite o valor de X: ";
-        cin >> valor_real;
-        cout << endl;
-        valor_numerico(polinomio_1, valor_real);
-        break;
-    case 2:
-
-        // FUNCAO PARA SOLICITAR POLINOMIO_1
-        // FUNCAO PARA SOLICITAR POLINOMIO_2
-
-        // somar_polinomios(polinomio_1, polinomio_2);
-        break;
-    // case 3:
-
-    //     // FUNCAO PARA SOLICITAR POLINOMIO_1
-    //     // FUNCAO PARA SOLICITAR POLINOMIO_2
-
-    //     subtrair_polinomios(polinomio_1, polinomio_2);
-    //     break;
-    // case 4:
-    //     float escalar_k;
-
-    //     // FUNCAO PARA SOLICITAR POLINOMIO
-
-    //     cout << "Digite o valor para multiplicar os coeficientes: ";
-    //     cin >> escalar_k;
-    //     cout << endl;
-    //     multiplicacao_escalar(polinomio_1, escalar_k);
-    //     break;
-    // case 5:
-
-    //     // FUNCAO PARA SOLICITAR POLINOMIO_1
-    //     // FUNCAO PARA SOLICITAR POLINOMIO_2
-
-    //     multiplicacao_polinomios(polinomio_1, polinomio_2);
-    //     break;
-    // case 6:
-    //     cout << "Saindo da aplicação...\n";
-    //     return 0;
-    //     break;
-    default:
-        cout << "Error: Isso nao devia ter acontecido :(\n";
-        return 0;
-        break;
-    }
 
     return 0;
 }
