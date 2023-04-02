@@ -387,13 +387,16 @@ string remove_espacos(string str)
     return sem_espacos;
 }
 
-void solicita_input_polinomio(LDE &polinomio)
+void solicita_input_polinomio(LDE &polinomio, string frase)
 {
-    string input_polinomio = "4x^2 - x^1 - 5";
+    string input_polinomio;
 
-    cout << "Digite um polinomio (Ex: 4x^2 + x^1 - 5): ";
-    getline(cin, input_polinomio);
-
+    do
+    {
+        cout << frase;
+        cin.ignore();
+        getline(cin, input_polinomio);
+    } while (input_polinomio.empty());
     input_polinomio = remove_espacos(input_polinomio);
 
     regex padrao_regex("(-?\\d*(\\.\\d+)?)?([a-zA-Z])\\^?(-?\\d+)?|(-?\\d+(\\.\\d+)?)");
@@ -431,129 +434,6 @@ void solicita_input_polinomio(LDE &polinomio)
 
 int main()
 {
-#pragma region TESTES
-    // START: Teste Soma
-    // LDE polinomio_1, polinomio_2;
-    // inicializar(polinomio_1);
-    // inicializar(polinomio_2);
-    // inserir_ordenado(polinomio_1, -7, 'x', 3);
-    // inserir_ordenado(polinomio_1, 5, 'x', 2);
-    // inserir_ordenado(polinomio_1, -1, 'x', 1);
-    // inserir_ordenado(polinomio_1, 4, 'x', 1);
-    // mostrar_lista(polinomio_1, "Polinomio 1");
-
-    // cout << endl;
-
-    // inserir_ordenado(polinomio_2, -2, 'x', 2);
-    // inserir_ordenado(polinomio_2, 8, 'x', 1);
-    // inserir_ordenado(polinomio_2, -7, 'x', 1);
-    // mostrar_lista(polinomio_2, "Polinomio 2");
-    // cout << endl;
-
-    // LDE polinomio_3;
-    // inicializar(polinomio_3);
-    // polinomio_3 = somar_polinomios(polinomio_1, polinomio_2);
-    // mostrar_lista(polinomio_3, "Polinomio Resultado");
-
-    // cout << endl;
-    // END: Teste Soma
-
-    // START: Teste Subtracao
-    // LDE polinomio_1, polinomio_2;
-    // inicializar(polinomio_1);
-    // inicializar(polinomio_2);
-    // inserir_ordenado(polinomio_1, 4, 'x', 2);
-    // inserir_ordenado(polinomio_1, -5, 'x', 1);
-    // inserir_ordenado(polinomio_1, 6, 'x', 1);
-    // mostrar_lista(polinomio_1, "Polinomio 1");
-
-    // cout << endl;
-
-    // inserir_ordenado(polinomio_2, 3, 'x', 1);
-    // inserir_ordenado(polinomio_2, -8, 'x', 1);
-    // mostrar_lista(polinomio_2, "Polinomio 2");
-
-    // cout << endl;
-
-    // LDE polinomio_3;
-    // inicializar(polinomio_3);
-    // polinomio_3 = subtrair_polinomios(polinomio_1, polinomio_2);
-
-    // mostrar_lista(polinomio_3, "Resultado Subtracao");
-    // cout << endl;
-// END: Teste Subtracao
-
-// START: Teste Multiplicacao por Escalar
-// LDE polinomio_1;
-// int escalar = -2;
-// inicializar(polinomio_1);
-// inserir_ordenado(polinomio_1, 3, 'x', 2);
-// inserir_ordenado(polinomio_1, -5, 'x', 1);
-// inserir_ordenado(polinomio_1, 8, 'x', 0);
-// mostrar_lista(polinomio_1, "Polinomio 1");
-
-// cout << endl;
-
-// LDE polinomio_2;
-// inicializar(polinomio_2);
-// polinomio_2 = multiplicacao_escalar(polinomio_1, escalar);
-
-// mostrar_lista(polinomio_2, "Resultado Multiplicacao por Escalar");
-// cout << endl;
-// END: Teste Multiplicacao por Escalar
-
-// START: Teste Multiplicacao de Polinomios
-// LDE polinomio_1, polinomio_2;
-// inicializar(polinomio_1);
-// inicializar(polinomio_2);
-
-// inserir_ordenado(polinomio_1, 3, 'x', 2);
-// inserir_ordenado(polinomio_1, -5, 'x', 1);
-// inserir_ordenado(polinomio_1, 8, 'x', 0);
-// mostrar_lista(polinomio_1, "Polinomio 1");
-
-// cout << endl;
-
-// inserir_ordenado(polinomio_2, -2, 'x', 1);
-// inserir_ordenado(polinomio_2, 1, 'x', 0);
-// mostrar_lista(polinomio_2, "Polinomio 2");
-
-// cout << endl;
-
-// LDE polinomio_3;
-// inicializar(polinomio_3);
-// polinomio_3 = multiplicacao_polinomios(polinomio_1, polinomio_2);
-
-// mostrar_lista(polinomio_3, "Resultado Multiplicacao");
-// cout << endl;
-// END: Teste Multiplicacao
-
-// START: Teste Valor Numerico
-// LDE polinomio_1;
-// inicializar(polinomio_1);
-
-// inserir_ordenado(polinomio_1, 1, 'x', 3);
-// inserir_ordenado(polinomio_1, -2, 'x', 2);
-// inserir_ordenado(polinomio_1, 4, 'x', 1);
-// mostrar_lista(polinomio_1, "Polinomio 1");
-
-// cout << endl;
-
-// float valor;
-// valor = valor_numerico(polinomio_1, 2);
-
-// cout << "Resultado Valor Numerico: " << valor;
-
-// cout << endl;
-// END: Teste Valor Numerico
-#pragma endregion TESTES
-
-    LDE polinomio_teste;
-    inicializar(polinomio_teste);
-    solicita_input_polinomio(polinomio_teste);
-    mostrar_lista(polinomio_teste, "POlinomio teste");
-    cout << endl;
-
     string menu = "//////////////////////////////////////////////////////////\n"
                   "//\t\t\tHP12C-no-rpn\t\t\t//\n"
                   "//\t\t\t\t\t\t\t//\n"
@@ -568,68 +448,94 @@ int main()
                   "//\t\t\t\t\t\t\t//\n"
                   "//////////////////////////////////////////////////////////\n";
 
-    cout << menu;
-    int input_usuario;
-    do
+    bool executando_aplicacao = true;
+    while (executando_aplicacao)
     {
-        cout << "Qual operacao deseja fazer? ";
-        cin >> input_usuario;
-    } while (input_usuario < 1 || input_usuario > 6);
+        cout << menu;
+        int input_usuario;
+        do
+        {
+            cout << "Qual operacao deseja fazer? ";
+            cin >> input_usuario;
+        } while (input_usuario < 1 || input_usuario > 6);
 
-    switch (input_usuario)
-    {
-    case 1:
-        LDE polinomio_1;
-        float valor_real;
+        if (input_usuario == 1)
+        {
+            LDE polinomio_1;
+            float valor_real;
 
-        // FUNCAO PARA SOLICITAR POLINOMI
-        solicita_input_polinomio(polinomio_1);
+            inicializar(polinomio_1);
 
-        cout << "Digite o valor de X: ";
-        cin >> valor_real;
-        cout << endl;
-        valor_numerico(polinomio_1, valor_real);
-        break;
-    case 2:
+            solicita_input_polinomio(polinomio_1, "Digite um polinomio (Ex: 4x^2 + x^1 - 5): ");
 
-        // FUNCAO PARA SOLICITAR POLINOMIO_1
-        // FUNCAO PARA SOLICITAR POLINOMIO_2
+            cout << "Digite o valor de X: ";
+            cin >> valor_real;
+            cout << endl;
+            cout << "Resultado: " << valor_numerico(polinomio_1, valor_real) << endl;
+            cout << "Precione qualquer tecla para continuar..." << endl;
+            cin.ignore();
+            cin.get();
+        }
+        else if (input_usuario == 2)
+        {
+            LDE polinomio_1, polinomio_2;
+            inicializar(polinomio_1);
+            inicializar(polinomio_2);
 
-        // somar_polinomios(polinomio_1, polinomio_2);
-        break;
-    // case 3:
+            solicita_input_polinomio(polinomio_1, "Digite um polinomio (Ex: 4x^2 + x^1 - 5): ");
+            solicita_input_polinomio(polinomio_2, "Digite outro polinomio (Ex: 4x^2 + x^1 - 5): ");
 
-    //     // FUNCAO PARA SOLICITAR POLINOMIO_1
-    //     // FUNCAO PARA SOLICITAR POLINOMIO_2
+            mostrar_lista(somar_polinomios(polinomio_1, polinomio_2), "Resultado");
+            cout << "Precione qualquer tecla para continuar..." << endl;
+            cin.get();
+        }
+        else if (input_usuario == 3)
+        {
+            LDE polinomio_1, polinomio_2;
+            inicializar(polinomio_1);
+            inicializar(polinomio_2);
 
-    //     subtrair_polinomios(polinomio_1, polinomio_2);
-    //     break;
-    // case 4:
-    //     float escalar_k;
+            solicita_input_polinomio(polinomio_1, "Digite um polinomio (Ex: 4x^2 + x^1 - 5): ");
+            solicita_input_polinomio(polinomio_2, "Digite outro polinomio (Ex: 4x^2 + x^1 - 5): ");
 
-    //     // FUNCAO PARA SOLICITAR POLINOMIO
+            mostrar_lista(subtrair_polinomios(polinomio_1, polinomio_2), "Resultado");
+            cout << "Precione qualquer tecla para continuar..." << endl;
+            cin.get();
+        }
+        else if (input_usuario == 4)
+        {
+            LDE polinomio_1;
+            inicializar(polinomio_1);
+            float escalar_k;
 
-    //     cout << "Digite o valor para multiplicar os coeficientes: ";
-    //     cin >> escalar_k;
-    //     cout << endl;
-    //     multiplicacao_escalar(polinomio_1, escalar_k);
-    //     break;
-    // case 5:
+            solicita_input_polinomio(polinomio_1, "Digite um polinomio (Ex: 4x^2 + x^1 - 5): ");
 
-    //     // FUNCAO PARA SOLICITAR POLINOMIO_1
-    //     // FUNCAO PARA SOLICITAR POLINOMIO_2
+            cout << "Digite o valor para multiplicar os coeficientes: ";
+            cin >> escalar_k;
+            cout << endl;
+            mostrar_lista(multiplicacao_escalar(polinomio_1, escalar_k), "Resultado");
+            cout << "Precione qualquer tecla para continuar..." << endl;
+            cin.get();
+        }
+        else if (input_usuario == 5)
+        {
+            LDE polinomio_1, polinomio_2;
+            inicializar(polinomio_1);
+            inicializar(polinomio_2);
 
-    //     multiplicacao_polinomios(polinomio_1, polinomio_2);
-    //     break;
-    // case 6:
-    //     cout << "Saindo da aplicação...\n";
-    //     return 0;
-    //     break;
-    default:
-        cout << "Error: Isso nao devia ter acontecido :(\n";
-        return 0;
-        break;
+            solicita_input_polinomio(polinomio_1, "Digite um polinomio (Ex: 4x^2 + x^1 - 5): ");
+            solicita_input_polinomio(polinomio_2, "Digite outro polinomio (Ex: 4x^2 + x^1 - 5): ");
+
+            mostrar_lista(multiplicacao_polinomios(polinomio_1, polinomio_2), "Resultado");
+            cout << "Precione qualquer tecla para continuar..." << endl;
+            cin.get();
+        }
+        else if (input_usuario == 6)
+        {
+            executando_aplicacao = false;
+            cout << "Saindo da aplicação...\n";
+            return 0;
+        }
     }
-
     return 0;
 }

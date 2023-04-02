@@ -370,119 +370,119 @@ int main()
 {
 #pragma region TESTES
     // START: Teste Soma
-    // LDE polinomio_1, polinomio_2;
-    // inicializar(polinomio_1);
-    // inicializar(polinomio_2);
-    // inserir_ordenado(polinomio_1, -7, 'x', 3);
-    // inserir_ordenado(polinomio_1, 5, 'x', 2);
-    // inserir_ordenado(polinomio_1, -1, 'x', 1);
-    // inserir_ordenado(polinomio_1, 4, 'x', 1);
-    // mostrar_lista(polinomio_1, "Polinomio 1");
+    LDE polinomio_1, polinomio_2;
+    inicializar(polinomio_1);
+    inicializar(polinomio_2);
+    inserir_ordenado(polinomio_1, -7, 'x', 3);
+    inserir_ordenado(polinomio_1, 5, 'x', 2);
+    inserir_ordenado(polinomio_1, -1, 'x', 1);
+    inserir_ordenado(polinomio_1, 4, 'x', 1);
+    mostrar_lista(polinomio_1, "Polinomio 1");
 
-    // cout << endl;
+    cout << endl;
 
-    // inserir_ordenado(polinomio_2, -2, 'x', 2);
-    // inserir_ordenado(polinomio_2, 8, 'x', 1);
-    // inserir_ordenado(polinomio_2, -7, 'x', 1);
-    // mostrar_lista(polinomio_2, "Polinomio 2");
-    // cout << endl;
+    inserir_ordenado(polinomio_2, -2, 'x', 2);
+    inserir_ordenado(polinomio_2, 8, 'x', 1);
+    inserir_ordenado(polinomio_2, -7, 'x', 1);
+    mostrar_lista(polinomio_2, "Polinomio 2");
+    cout << endl;
 
-    // LDE polinomio_3;
-    // inicializar(polinomio_3);
-    // polinomio_3 = somar_polinomios(polinomio_1, polinomio_2);
-    // mostrar_lista(polinomio_3, "Polinomio Resultado");
+    LDE polinomio_3;
+    inicializar(polinomio_3);
+    polinomio_3 = somar_polinomios(polinomio_1, polinomio_2);
+    mostrar_lista(polinomio_3, "Polinomio Resultado");
 
-    // cout << endl;
+    cout << endl;
     // END: Teste Soma
 
     // START: Teste Subtracao
-    // LDE polinomio_1, polinomio_2;
-    // inicializar(polinomio_1);
-    // inicializar(polinomio_2);
-    // inserir_ordenado(polinomio_1, 4, 'x', 2);
-    // inserir_ordenado(polinomio_1, -5, 'x', 1);
-    // inserir_ordenado(polinomio_1, 6, 'x', 1);
-    // mostrar_lista(polinomio_1, "Polinomio 1");
+    LDE polinomio_1, polinomio_2;
+    inicializar(polinomio_1);
+    inicializar(polinomio_2);
+    inserir_ordenado(polinomio_1, 4, 'x', 2);
+    inserir_ordenado(polinomio_1, -5, 'x', 1);
+    inserir_ordenado(polinomio_1, 6, 'x', 1);
+    mostrar_lista(polinomio_1, "Polinomio 1");
 
-    // cout << endl;
+    cout << endl;
 
-    // inserir_ordenado(polinomio_2, 3, 'x', 1);
-    // inserir_ordenado(polinomio_2, -8, 'x', 1);
-    // mostrar_lista(polinomio_2, "Polinomio 2");
+    inserir_ordenado(polinomio_2, 3, 'x', 1);
+    inserir_ordenado(polinomio_2, -8, 'x', 1);
+    mostrar_lista(polinomio_2, "Polinomio 2");
 
-    // cout << endl;
+    cout << endl;
 
-    // LDE polinomio_3;
-    // inicializar(polinomio_3);
-    // polinomio_3 = subtrair_polinomios(polinomio_1, polinomio_2);
+    LDE polinomio_3;
+    inicializar(polinomio_3);
+    polinomio_3 = subtrair_polinomios(polinomio_1, polinomio_2);
 
-    // mostrar_lista(polinomio_3, "Resultado Subtracao");
-    // cout << endl;
-// END: Teste Subtracao
+    mostrar_lista(polinomio_3, "Resultado Subtracao");
+    cout << endl;
+    // END: Teste Subtracao
 
-// START: Teste Multiplicacao por Escalar
-// LDE polinomio_1;
-// int escalar = -2;
-// inicializar(polinomio_1);
-// inserir_ordenado(polinomio_1, 3, 'x', 2);
-// inserir_ordenado(polinomio_1, -5, 'x', 1);
-// inserir_ordenado(polinomio_1, 8, 'x', 0);
-// mostrar_lista(polinomio_1, "Polinomio 1");
+    // START: Teste Multiplicacao por Escalar
+    LDE polinomio_1;
+    int escalar = -2;
+    inicializar(polinomio_1);
+    inserir_ordenado(polinomio_1, 3, 'x', 2);
+    inserir_ordenado(polinomio_1, -5, 'x', 1);
+    inserir_ordenado(polinomio_1, 8, 'x', 0);
+    mostrar_lista(polinomio_1, "Polinomio 1");
 
-// cout << endl;
+    cout << endl;
 
-// LDE polinomio_2;
-// inicializar(polinomio_2);
-// polinomio_2 = multiplicacao_escalar(polinomio_1, escalar);
+    LDE polinomio_2;
+    inicializar(polinomio_2);
+    polinomio_2 = multiplicacao_escalar(polinomio_1, escalar);
 
-// mostrar_lista(polinomio_2, "Resultado Multiplicacao por Escalar");
-// cout << endl;
-// END: Teste Multiplicacao por Escalar
+    mostrar_lista(polinomio_2, "Resultado Multiplicacao por Escalar");
+    cout << endl;
+    // END: Teste Multiplicacao por Escalar
 
-// START: Teste Multiplicacao de Polinomios
-// LDE polinomio_1, polinomio_2;
-// inicializar(polinomio_1);
-// inicializar(polinomio_2);
+    // START: Teste Multiplicacao de Polinomios
+    LDE polinomio_1, polinomio_2;
+    inicializar(polinomio_1);
+    inicializar(polinomio_2);
 
-// inserir_ordenado(polinomio_1, 3, 'x', 2);
-// inserir_ordenado(polinomio_1, -5, 'x', 1);
-// inserir_ordenado(polinomio_1, 8, 'x', 0);
-// mostrar_lista(polinomio_1, "Polinomio 1");
+    inserir_ordenado(polinomio_1, 3, 'x', 2);
+    inserir_ordenado(polinomio_1, -5, 'x', 1);
+    inserir_ordenado(polinomio_1, 8, 'x', 0);
+    mostrar_lista(polinomio_1, "Polinomio 1");
 
-// cout << endl;
+    cout << endl;
 
-// inserir_ordenado(polinomio_2, -2, 'x', 1);
-// inserir_ordenado(polinomio_2, 1, 'x', 0);
-// mostrar_lista(polinomio_2, "Polinomio 2");
+    inserir_ordenado(polinomio_2, -2, 'x', 1);
+    inserir_ordenado(polinomio_2, 1, 'x', 0);
+    mostrar_lista(polinomio_2, "Polinomio 2");
 
-// cout << endl;
+    cout << endl;
 
-// LDE polinomio_3;
-// inicializar(polinomio_3);
-// polinomio_3 = multiplicacao_polinomios(polinomio_1, polinomio_2);
+    LDE polinomio_3;
+    inicializar(polinomio_3);
+    polinomio_3 = multiplicacao_polinomios(polinomio_1, polinomio_2);
 
-// mostrar_lista(polinomio_3, "Resultado Multiplicacao");
-// cout << endl;
-// END: Teste Multiplicacao
+    mostrar_lista(polinomio_3, "Resultado Multiplicacao");
+    cout << endl;
+    // END: Teste Multiplicacao
 
-// START: Teste Valor Numerico
-// LDE polinomio_1;
-// inicializar(polinomio_1);
+    // START: Teste Valor Numerico
+    LDE polinomio_1;
+    inicializar(polinomio_1);
 
-// inserir_ordenado(polinomio_1, 1, 'x', 3);
-// inserir_ordenado(polinomio_1, -2, 'x', 2);
-// inserir_ordenado(polinomio_1, 4, 'x', 1);
-// mostrar_lista(polinomio_1, "Polinomio 1");
+    inserir_ordenado(polinomio_1, 1, 'x', 3);
+    inserir_ordenado(polinomio_1, -2, 'x', 2);
+    inserir_ordenado(polinomio_1, 4, 'x', 1);
+    mostrar_lista(polinomio_1, "Polinomio 1");
 
-// cout << endl;
+    cout << endl;
 
-// float valor;
-// valor = valor_numerico(polinomio_1, 2);
+    float valor;
+    valor = valor_numerico(polinomio_1, 2);
 
-// cout << "Resultado Valor Numerico: " << valor;
+    cout << "Resultado Valor Numerico: " << valor;
 
-// cout << endl;
-// END: Teste Valor Numerico
+    cout << endl;
+    // END: Teste Valor Numerico
 #pragma endregion TESTES
 
     return 0;
