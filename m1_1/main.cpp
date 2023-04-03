@@ -9,6 +9,7 @@ using namespace std;
 #include <iostream>
 #include <string>
 #include <regex>
+#include <limits>
 
 struct No
 {
@@ -91,6 +92,7 @@ void mostrar_lista(LDE lde, string frase)
 
         aux = aux->eloP;
     }
+    cout << endl;
 }
 
 bool inserir_ordenado(LDE &lde, float coeficiente, char letra, int exp)
@@ -394,8 +396,7 @@ void solicita_input_polinomio(LDE &polinomio, string frase)
     do
     {
         cout << frase;
-        cin.ignore();
-        getline(cin, input_polinomio);
+        getline(cin, input_polinomio, '\n');
     } while (input_polinomio.empty());
     input_polinomio = remove_espacos(input_polinomio);
 
@@ -404,10 +405,10 @@ void solicita_input_polinomio(LDE &polinomio, string frase)
 
     while (regex_search(input_polinomio, valor_encontrado, padrao_regex))
     {
-        string coeficiente = valor_encontrado[1];
-        string letra = valor_encontrado[3];
-        string expoente = valor_encontrado[4];
-        string constante = valor_encontrado[5];
+        string coeficiente = valor_encontrado[1].str();
+        string letra = valor_encontrado[3].str();
+        string expoente = valor_encontrado[4].str();
+        string constante = valor_encontrado[5].str();
 
         if (!constante.empty())
         {
@@ -425,6 +426,7 @@ void solicita_input_polinomio(LDE &polinomio, string frase)
 
             if (expoente.empty())
                 expoente = "1";
+
             inserir_ordenado(polinomio, stof(coeficiente), letra[0], stoi(expoente));
         }
 
@@ -458,6 +460,7 @@ int main()
             cout << "Qual operacao deseja fazer? ";
             cin >> input_usuario;
         } while (input_usuario < 1 || input_usuario > 6);
+        cin.ignore();
 
         if (input_usuario == 1)
         {
@@ -470,10 +473,10 @@ int main()
 
             cout << "Digite o valor de X: ";
             cin >> valor_real;
+            cin.ignore();
             cout << endl;
             cout << "Resultado: " << valor_numerico(polinomio_1, valor_real) << endl;
-            cout << "Precione qualquer tecla para continuar..." << endl;
-            cin.ignore();
+            cout << "Precione Enter tecla para continuar..." << endl;
             cin.get();
         }
         else if (input_usuario == 2)
@@ -486,7 +489,7 @@ int main()
             solicita_input_polinomio(polinomio_2, "Digite outro polinomio (Ex: 4x^2 + x^1 - 5): ");
 
             mostrar_lista(somar_polinomios(polinomio_1, polinomio_2), "Resultado");
-            cout << "Precione qualquer tecla para continuar..." << endl;
+            cout << "Precione Enter tecla para continuar..." << endl;
             cin.get();
         }
         else if (input_usuario == 3)
@@ -499,7 +502,7 @@ int main()
             solicita_input_polinomio(polinomio_2, "Digite outro polinomio (Ex: 4x^2 + x^1 - 5): ");
 
             mostrar_lista(subtrair_polinomios(polinomio_1, polinomio_2), "Resultado");
-            cout << "Precione qualquer tecla para continuar..." << endl;
+            cout << "Precione Enter tecla para continuar..." << endl;
             cin.get();
         }
         else if (input_usuario == 4)
@@ -512,9 +515,10 @@ int main()
 
             cout << "Digite o valor para multiplicar os coeficientes: ";
             cin >> escalar_k;
+            cin.ignore();
             cout << endl;
             mostrar_lista(multiplicacao_escalar(polinomio_1, escalar_k), "Resultado");
-            cout << "Precione qualquer tecla para continuar..." << endl;
+            cout << "Precione Enter tecla para continuar..." << endl;
             cin.get();
         }
         else if (input_usuario == 5)
@@ -527,7 +531,7 @@ int main()
             solicita_input_polinomio(polinomio_2, "Digite outro polinomio (Ex: 4x^2 + x^1 - 5): ");
 
             mostrar_lista(multiplicacao_polinomios(polinomio_1, polinomio_2), "Resultado");
-            cout << "Precione qualquer tecla para continuar..." << endl;
+            cout << "Precione Enter tecla para continuar..." << endl;
             cin.get();
         }
         else if (input_usuario == 6)
