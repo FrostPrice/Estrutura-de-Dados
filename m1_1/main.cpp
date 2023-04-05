@@ -53,14 +53,14 @@ void mostrar_lista(LDE lde, string frase)
         // Formata os monomios
         if (aux == lde.inicio)
         {
-            if (aux->coeficiente != 0 && aux->coeficiente != 1)
+            if (aux->coeficiente != 0 && aux->coeficiente != 1 || aux->letra == '\0')
             {
                 cout << aux->coeficiente;
             }
         }
         else
         {
-            if (aux->coeficiente != 0 && aux->coeficiente != 1 && aux->coeficiente != -1)
+            if (aux->coeficiente != 0 && aux->coeficiente != 1 && aux->coeficiente != -1 || aux->letra == '\0')
             {
                 if (aux->coeficiente > 1)
                     cout << "+ " << aux->coeficiente;
@@ -336,6 +336,8 @@ LDE multiplicacao_polinomios(LDE polinomio_1, LDE polinomio_2)
         aux_polinomio_2 = polinomio_2.inicio;
         while (aux_polinomio_2 != nullptr)
         {
+            cout << "Expoente_1: " << aux_polinomio_1->exp << endl;
+            cout << "Expoente_2: " << aux_polinomio_2->exp << endl;
             float coeficiente = aux_polinomio_1->coeficiente * aux_polinomio_2->coeficiente;
             int expoente = aux_polinomio_1->exp + aux_polinomio_2->exp;
             inserir_ordenado(polinomio_resultado, coeficiente, aux_polinomio_1->letra, expoente);
@@ -346,6 +348,8 @@ LDE multiplicacao_polinomios(LDE polinomio_1, LDE polinomio_2)
         aux_polinomio_1 = aux_polinomio_1->eloP;
     }
 
+    // mostrar_lista(polinomio_resultado, "Resultadosssssss");
+
     polinomio_resultado = somar_monomios(polinomio_resultado);
 
     return polinomio_resultado;
@@ -353,18 +357,15 @@ LDE multiplicacao_polinomios(LDE polinomio_1, LDE polinomio_2)
 
 float valor_numerico(LDE polinomio, float valor_real)
 {
-    LDE polinomio_resultado;
-    inicializar(polinomio_resultado);
-
     float resultado_final = 0;
     No *aux_polinomio = polinomio.inicio;
+
     while (aux_polinomio != nullptr)
     {
         float resultado_exponencial = 1;
-        for (int i = 1; i <= aux_polinomio->exp; i++)
-        {
-            resultado_exponencial *= valor_real;
-        }
+        if (aux_polinomio->letra != '\0')
+            for (int i = 0; i < aux_polinomio->exp; i++)
+                resultado_exponencial *= valor_real;
 
         resultado_final += resultado_exponencial * aux_polinomio->coeficiente;
         aux_polinomio = aux_polinomio->eloP;
@@ -410,12 +411,7 @@ void solicita_input_polinomio(LDE &polinomio, string frase)
         string constante = valor_encontrado[5].str();
 
         if (!constante.empty())
-        {
-            coeficiente = "1";
-            letra = "";
-            expoente = "1";
-            inserir_ordenado(polinomio, stof(constante), letra[0], stoi(expoente));
-        }
+            inserir_ordenado(polinomio, stof(constante), '\0', 0);
         else
         {
             if (coeficiente.empty())
@@ -442,7 +438,7 @@ int main()
                   "// Escolha a operação [1-6]\t\t\t\t//\n"
                   "// 1) Valor Numerico\t\t\t\t\t//\n"
                   "// 2) Somar Polinomios\t\t\t\t\t//\n"
-                  "// 3) Subtrait Polonomios\t\t\t\t//\n"
+                  "// 3) Subtrair Polonomios\t\t\t\t//\n"
                   "// 4) Multiplicacao Escalar\t\t\t\t//\n"
                   "// 5) Multiplicacao de Polinomios\t\t\t//\n"
                   "// 6) Sair\t\t\t\t\t\t//\n"
@@ -471,7 +467,7 @@ int main()
 
             solicita_input_polinomio(polinomio_1, "Digite um polinomio (Ex: 4x^2 + x^1 - 5): ");
 
-            cout << "Digite o valor de X: ";
+            cout << "Digite o valor do coeficiente: ";
             cin >> valor_real;
             cin.ignore();
             cout << endl;
