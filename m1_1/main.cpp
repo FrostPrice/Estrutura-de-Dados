@@ -256,7 +256,6 @@ LDE somar_monomios(LDE polinomio)
     return polinomio_soma;
 }
 
-// TODO: A funcao somar_polinomios e subtrair_polinomios podem se tornar apenas uma funcao com um if determinando a inversao dos sinais
 LDE somar_polinomios(LDE polinomio_1, LDE polinomio_2)
 {
     LDE polinomio_resultado;
@@ -453,6 +452,7 @@ int main()
     bool executando_aplicacao = true;
     while (executando_aplicacao)
     {
+        system("cls || clear");
         cout << menu;
         int input_usuario;
         do
