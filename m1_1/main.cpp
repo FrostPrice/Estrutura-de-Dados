@@ -228,7 +228,7 @@ bool retirar_por_expoente(LDE &lde, int exp)
 3) Multiplicar um polinômio por um escalar (valor real) - OK
 4) Multiplicar dois polinômios, resultando em um terceiro polinômio - OK
 5) Determinar o valor numérico de um polinômio - OK
-6) (Opicional)Fazer a divisão de polinomios (Impossível)
+6) (Opicional)Fazer a divisão de polinomios (Impossível) - NOK
 */
 LDE somar_monomios(LDE polinomio)
 {
@@ -318,6 +318,8 @@ LDE multiplicacao_escalar(LDE polinomio, float escalar_k)
 
         aux_polinomio = aux_polinomio->eloP;
     }
+
+    polinomio_resultado = somar_monomios(polinomio_resultado);
 
     return polinomio_resultado;
 }
