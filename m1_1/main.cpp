@@ -446,7 +446,7 @@ int main()
     bool executando_aplicacao = true;
     while (executando_aplicacao)
     {
-        system("cls || clear");
+        system("cls || clear"); // LImpa o terminal no Windows ou Linux
         cout << menu;
         int input_usuario;
         do

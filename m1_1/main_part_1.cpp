@@ -9,11 +9,12 @@ using namespace std;
 #include <iostream>
 #include <string>
 #include <regex>
+#include <limits>
 
 struct No
 {
-    char letra;
     float coeficiente;
+    char letra;
     int exp;
     No *eloP;
     No *eloA;
@@ -52,19 +53,26 @@ void mostrar_lista(LDE lde, string frase)
         // Formata os monomios
         if (aux == lde.inicio)
         {
-            if (aux->coeficiente != 0 && aux->coeficiente != 1)
+            if (aux->coeficiente != 0 && aux->coeficiente != 1 || aux->letra == '\0') // O aux->letra == '\0' valida se é uma constante
             {
                 cout << aux->coeficiente;
             }
         }
         else
         {
-            if (aux->coeficiente != 0 && aux->coeficiente != 1)
+            if (aux->coeficiente != 0 && aux->coeficiente != 1 && aux->coeficiente != -1 || aux->letra == '\0') // O aux->letra == '\0' valida se é uma constante
             {
                 if (aux->coeficiente > 1)
                     cout << "+ " << aux->coeficiente;
                 else
                     cout << "- " << -aux->coeficiente;
+            }
+            else
+            {
+                if (aux->coeficiente > 0)
+                    cout << "+ ";
+                else
+                    cout << "- ";
             }
         }
 
@@ -84,6 +92,7 @@ void mostrar_lista(LDE lde, string frase)
 
         aux = aux->eloP;
     }
+    cout << endl;
 }
 
 bool inserir_ordenado(LDE &lde, float coeficiente, char letra, int exp)
@@ -219,7 +228,7 @@ bool retirar_por_expoente(LDE &lde, int exp)
 3) Multiplicar um polinômio por um escalar (valor real) - OK
 4) Multiplicar dois polinômios, resultando em um terceiro polinômio - OK
 5) Determinar o valor numérico de um polinômio - OK
-6) (Opicional)Fazer a divisão de polinomios (Impossível)
+6) (Opicional)Fazer a divisão de polinomios (Impossível) - NOK
 */
 LDE somar_monomios(LDE polinomio)
 {
@@ -247,7 +256,6 @@ LDE somar_monomios(LDE polinomio)
     return polinomio_soma;
 }
 
-// TODO: A funcao somar_polinomios e subtrair_polinomios podem se tornar apenas uma funcao com um if determinando a inversao dos sinais
 LDE somar_polinomios(LDE polinomio_1, LDE polinomio_2)
 {
     LDE polinomio_resultado;
@@ -311,6 +319,8 @@ LDE multiplicacao_escalar(LDE polinomio, float escalar_k)
         aux_polinomio = aux_polinomio->eloP;
     }
 
+    polinomio_resultado = somar_monomios(polinomio_resultado);
+
     return polinomio_resultado;
 }
 
@@ -345,18 +355,15 @@ LDE multiplicacao_polinomios(LDE polinomio_1, LDE polinomio_2)
 
 float valor_numerico(LDE polinomio, float valor_real)
 {
-    LDE polinomio_resultado;
-    inicializar(polinomio_resultado);
-
     float resultado_final = 0;
     No *aux_polinomio = polinomio.inicio;
+
     while (aux_polinomio != nullptr)
     {
         float resultado_exponencial = 1;
-        for (int i = 1; i <= aux_polinomio->exp; i++)
-        {
-            resultado_exponencial *= valor_real;
-        }
+        if (aux_polinomio->letra != '\0')
+            for (int i = 0; i < aux_polinomio->exp; i++)
+                resultado_exponencial *= valor_real;
 
         resultado_final += resultado_exponencial * aux_polinomio->coeficiente;
         aux_polinomio = aux_polinomio->eloP;
@@ -369,8 +376,9 @@ float valor_numerico(LDE polinomio, float valor_real)
 int main()
 {
 #pragma region TESTES
+    LDE polinomio_1, polinomio_2, polinomio_3;
+
     // START: Teste Soma
-    LDE polinomio_1, polinomio_2;
     inicializar(polinomio_1);
     inicializar(polinomio_2);
     inserir_ordenado(polinomio_1, -7, 'x', 3);
@@ -387,7 +395,6 @@ int main()
     mostrar_lista(polinomio_2, "Polinomio 2");
     cout << endl;
 
-    LDE polinomio_3;
     inicializar(polinomio_3);
     polinomio_3 = somar_polinomios(polinomio_1, polinomio_2);
     mostrar_lista(polinomio_3, "Polinomio Resultado");
@@ -396,7 +403,6 @@ int main()
     // END: Teste Soma
 
     // START: Teste Subtracao
-    LDE polinomio_1, polinomio_2;
     inicializar(polinomio_1);
     inicializar(polinomio_2);
     inserir_ordenado(polinomio_1, 4, 'x', 2);
@@ -412,7 +418,6 @@ int main()
 
     cout << endl;
 
-    LDE polinomio_3;
     inicializar(polinomio_3);
     polinomio_3 = subtrair_polinomios(polinomio_1, polinomio_2);
 
@@ -421,7 +426,6 @@ int main()
     // END: Teste Subtracao
 
     // START: Teste Multiplicacao por Escalar
-    LDE polinomio_1;
     int escalar = -2;
     inicializar(polinomio_1);
     inserir_ordenado(polinomio_1, 3, 'x', 2);
@@ -431,7 +435,6 @@ int main()
 
     cout << endl;
 
-    LDE polinomio_2;
     inicializar(polinomio_2);
     polinomio_2 = multiplicacao_escalar(polinomio_1, escalar);
 
@@ -440,7 +443,6 @@ int main()
     // END: Teste Multiplicacao por Escalar
 
     // START: Teste Multiplicacao de Polinomios
-    LDE polinomio_1, polinomio_2;
     inicializar(polinomio_1);
     inicializar(polinomio_2);
 
@@ -457,7 +459,6 @@ int main()
 
     cout << endl;
 
-    LDE polinomio_3;
     inicializar(polinomio_3);
     polinomio_3 = multiplicacao_polinomios(polinomio_1, polinomio_2);
 
@@ -466,7 +467,6 @@ int main()
     // END: Teste Multiplicacao
 
     // START: Teste Valor Numerico
-    LDE polinomio_1;
     inicializar(polinomio_1);
 
     inserir_ordenado(polinomio_1, 1, 'x', 3);
@@ -484,6 +484,5 @@ int main()
     cout << endl;
     // END: Teste Valor Numerico
 #pragma endregion TESTES
-
     return 0;
 }
