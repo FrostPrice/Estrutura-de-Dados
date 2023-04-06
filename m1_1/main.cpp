@@ -336,8 +336,6 @@ LDE multiplicacao_polinomios(LDE polinomio_1, LDE polinomio_2)
         aux_polinomio_2 = polinomio_2.inicio;
         while (aux_polinomio_2 != nullptr)
         {
-            cout << "Expoente_1: " << aux_polinomio_1->exp << endl;
-            cout << "Expoente_2: " << aux_polinomio_2->exp << endl;
             float coeficiente = aux_polinomio_1->coeficiente * aux_polinomio_2->coeficiente;
             int expoente = aux_polinomio_1->exp + aux_polinomio_2->exp;
             inserir_ordenado(polinomio_resultado, coeficiente, aux_polinomio_1->letra, expoente);
@@ -347,8 +345,6 @@ LDE multiplicacao_polinomios(LDE polinomio_1, LDE polinomio_2)
 
         aux_polinomio_1 = aux_polinomio_1->eloP;
     }
-
-    // mostrar_lista(polinomio_resultado, "Resultadosssssss");
 
     polinomio_resultado = somar_monomios(polinomio_resultado);
 
