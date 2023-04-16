@@ -4,12 +4,12 @@ Alunos:
     - Matheus de Oliveira Rocha
 */
 
-using namespace std;
+#ifndef LDE_POLINOMIOS_H
+#define LDE_POLINOMIOS_H
 
+using namespace std;
 #include <iostream>
 #include <string>
-#include <regex>
-#include <limits>
 
 struct No
 {
@@ -53,14 +53,14 @@ void mostrar_lista(LDE lde, string frase)
         // Formata os monomios
         if (aux == lde.inicio)
         {
-            if (aux->coeficiente != 0 && aux->coeficiente != 1 || aux->letra == '\0') // O aux->letra == '\0' valida se é uma constante
+            if (aux->coeficiente != 0 && aux->coeficiente != 1 || aux->letra == '\0')
             {
                 cout << aux->coeficiente;
             }
         }
         else
         {
-            if (aux->coeficiente != 0 && aux->coeficiente != 1 && aux->coeficiente != -1 || aux->letra == '\0') // O aux->letra == '\0' valida se é uma constante
+            if (aux->coeficiente != 0 && aux->coeficiente != 1 && aux->coeficiente != -1 || aux->letra == '\0')
             {
                 if (aux->coeficiente > 1)
                     cout << "+ " << aux->coeficiente;
@@ -339,8 +339,16 @@ LDE multiplicacao_polinomios(LDE polinomio_1, LDE polinomio_2)
         while (aux_polinomio_2 != nullptr)
         {
             float coeficiente = aux_polinomio_1->coeficiente * aux_polinomio_2->coeficiente;
+            char letra;
+            if (aux_polinomio_1->letra == '\0')
+                letra = aux_polinomio_2->letra;
+            else if (aux_polinomio_2->letra == '\0')
+                letra = aux_polinomio_1->letra;
+            else
+                letra = aux_polinomio_1->letra;
+
             int expoente = aux_polinomio_1->exp + aux_polinomio_2->exp;
-            inserir_ordenado(polinomio_resultado, coeficiente, aux_polinomio_1->letra, expoente);
+            inserir_ordenado(polinomio_resultado, coeficiente, letra, expoente);
 
             aux_polinomio_2 = aux_polinomio_2->eloP;
         }
@@ -372,117 +380,4 @@ float valor_numerico(LDE polinomio, float valor_real)
     return resultado_final;
 }
 #pragma endregion FUNCOES_AVANCADAS
-
-int main()
-{
-#pragma region TESTES
-    LDE polinomio_1, polinomio_2, polinomio_3;
-
-    // START: Teste Soma
-    inicializar(polinomio_1);
-    inicializar(polinomio_2);
-    inserir_ordenado(polinomio_1, -7, 'x', 3);
-    inserir_ordenado(polinomio_1, 5, 'x', 2);
-    inserir_ordenado(polinomio_1, -1, 'x', 1);
-    inserir_ordenado(polinomio_1, 4, 'x', 1);
-    mostrar_lista(polinomio_1, "Polinomio 1");
-
-    cout << endl;
-
-    inserir_ordenado(polinomio_2, -2, 'x', 2);
-    inserir_ordenado(polinomio_2, 8, 'x', 1);
-    inserir_ordenado(polinomio_2, -7, 'x', 1);
-    mostrar_lista(polinomio_2, "Polinomio 2");
-    cout << endl;
-
-    inicializar(polinomio_3);
-    polinomio_3 = somar_polinomios(polinomio_1, polinomio_2);
-    mostrar_lista(polinomio_3, "Polinomio Resultado");
-
-    cout << endl;
-    // END: Teste Soma
-
-    // START: Teste Subtracao
-    inicializar(polinomio_1);
-    inicializar(polinomio_2);
-    inserir_ordenado(polinomio_1, 4, 'x', 2);
-    inserir_ordenado(polinomio_1, -5, 'x', 1);
-    inserir_ordenado(polinomio_1, 6, 'x', 1);
-    mostrar_lista(polinomio_1, "Polinomio 1");
-
-    cout << endl;
-
-    inserir_ordenado(polinomio_2, 3, 'x', 1);
-    inserir_ordenado(polinomio_2, -8, 'x', 1);
-    mostrar_lista(polinomio_2, "Polinomio 2");
-
-    cout << endl;
-
-    inicializar(polinomio_3);
-    polinomio_3 = subtrair_polinomios(polinomio_1, polinomio_2);
-
-    mostrar_lista(polinomio_3, "Resultado Subtracao");
-    cout << endl;
-    // END: Teste Subtracao
-
-    // START: Teste Multiplicacao por Escalar
-    int escalar = -2;
-    inicializar(polinomio_1);
-    inserir_ordenado(polinomio_1, 3, 'x', 2);
-    inserir_ordenado(polinomio_1, -5, 'x', 1);
-    inserir_ordenado(polinomio_1, 8, 'x', 0);
-    mostrar_lista(polinomio_1, "Polinomio 1");
-
-    cout << endl;
-
-    inicializar(polinomio_2);
-    polinomio_2 = multiplicacao_escalar(polinomio_1, escalar);
-
-    mostrar_lista(polinomio_2, "Resultado Multiplicacao por Escalar");
-    cout << endl;
-    // END: Teste Multiplicacao por Escalar
-
-    // START: Teste Multiplicacao de Polinomios
-    inicializar(polinomio_1);
-    inicializar(polinomio_2);
-
-    inserir_ordenado(polinomio_1, 3, 'x', 2);
-    inserir_ordenado(polinomio_1, -5, 'x', 1);
-    inserir_ordenado(polinomio_1, 8, 'x', 0);
-    mostrar_lista(polinomio_1, "Polinomio 1");
-
-    cout << endl;
-
-    inserir_ordenado(polinomio_2, -2, 'x', 1);
-    inserir_ordenado(polinomio_2, 1, 'x', 0);
-    mostrar_lista(polinomio_2, "Polinomio 2");
-
-    cout << endl;
-
-    inicializar(polinomio_3);
-    polinomio_3 = multiplicacao_polinomios(polinomio_1, polinomio_2);
-
-    mostrar_lista(polinomio_3, "Resultado Multiplicacao");
-    cout << endl;
-    // END: Teste Multiplicacao
-
-    // START: Teste Valor Numerico
-    inicializar(polinomio_1);
-
-    inserir_ordenado(polinomio_1, 1, 'x', 3);
-    inserir_ordenado(polinomio_1, -2, 'x', 2);
-    inserir_ordenado(polinomio_1, 4, 'x', 1);
-    mostrar_lista(polinomio_1, "Polinomio 1");
-
-    cout << endl;
-
-    float valor;
-    valor = valor_numerico(polinomio_1, 2);
-
-    cout << "Resultado Valor Numerico: " << valor;
-
-    cout << endl;
-    // END: Teste Valor Numerico
-#pragma endregion TESTES
-    return 0;
-}
+#endif // LDE_POLINOMIOS_H
