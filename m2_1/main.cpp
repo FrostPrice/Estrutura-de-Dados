@@ -1,3 +1,9 @@
+/*
+Alunos:
+    - Matheus de Oliveira Rocha
+    - Mateus Barbosa
+*/
+
 using namespace std;
 
 #include "string"
@@ -159,7 +165,6 @@ No *rotacao_avl(No *k)
             return rotacao_simples_esquerda(k);
     }
 }
-
 #pragma endregion AVL
 
 #pragma region TADS
@@ -232,7 +237,16 @@ No *retirar(No *&raiz, T chave, string nome_do_campo, Info *&info) // O info ser
         Info *aux_info;
         buscar_maior(raiz->esq, aux_info, nome_do_campo);
         raiz->info = aux_info;
-        raiz->esq = retirar<T>(raiz->esq, get_struct_campo<T>(aux_info, nome_do_campo), nome_do_campo, aux_info);
+        raiz->esq = retirar<T>(raiz->esq, get_struct_campo<T>(aux_info, nome_do_campo), nome_do_campo, aux_info); // O aux_info dessa funcao nao tem utilidade
+
+        // Controle de altura
+        int alt_e = get_altura(raiz->esq);
+        int alt_d = get_altura(raiz->dir);
+        if (alt_e - alt_d == 2 || alt_e - alt_d == -2)
+            raiz = rotacao_avl(raiz);
+        else
+            raiz->altura = (alt_e > alt_d) ? alt_e + 1 : alt_d + 1;
+
         return raiz;
     }
 
@@ -264,17 +278,17 @@ void listar(No *&raiz)
     listar(raiz->dir); // Na raiz atual, vai para a direita
 }
 
-void deletar(No *&raiz)
+void deletar(No *&raiz, bool deletar_info = false)
 {
     if (raiz != nullptr)
     {
-        deletar(raiz->esq);
-        deletar(raiz->dir);
-        if (raiz->info != nullptr && !raiz->info) // Se a info ainda existir na memoria, apaga ela
+        deletar(raiz->esq, deletar_info);
+        deletar(raiz->dir, deletar_info);
+        if (deletar_info) // Se a info ainda existir na memoria, apaga ela
         {
             delete raiz->info;
-            raiz->info = nullptr;
         }
+        raiz->info = nullptr;
         delete raiz;
         raiz = nullptr;
     }
@@ -290,44 +304,38 @@ void inserir(Arvore &arvore_cpf, Arvore &arvore_nome, Info *info) // Pseudo-func
     };
 }
 
-template <typename T>
-void retirar(Arvore &arvore_cpf, Arvore &arvore_nome, int operacao, T chave) // Pseudo-funcao para passar uma Arvore ao inves de um No
+void retirar(Arvore &arvore_cpf, Arvore &arvore_nome, long int chave) // Retira por CPF
 {
-    if (operacao == 1) // Retirar por CPF
+    No *no = buscar<long int>(arvore_cpf.raiz, chave, "cpf");
+    if (no != nullptr) // Verifica se o CPF informado se encontra na arvore
     {
-        if (buscar<long int>(arvore_cpf.raiz, chave, "cpf") != nullptr) // Verifica se o CPF informado se encontra na arvore
-        {
-            Info *info = nullptr;
-            retirar<long int>(arvore_cpf.raiz, chave, "cpf", info);
-            retirar<string>(arvore_nome.raiz, info->nome, "nome", info);
-            delete info; // Deleta da memoria o valor qua info aponta
-            info = nullptr;
-        }
-        else
-        {
-            cout << "CPF nao encontrado!";
-            return;
-        }
+        Info *info = nullptr;
+        retirar<long int>(arvore_cpf.raiz, chave, "cpf", info);
+        retirar<string>(arvore_nome.raiz, info->nome, "nome", info);
+        delete info; // Deleta da memoria o valor qua info aponta
+        info = nullptr;
     }
-    else if (operacao == 2) // Retirar por Nome
+    else
     {
-        // if (buscar<string>(arvore_nome.raiz, chave, "nome") != nullptr) // Verifica se o Nome informado se encontra na arvore
-        // {
-        //     Info *info = nullptr;
-        //     retirar<string>(arvore_nome.raiz, chave, "nome", info);
-        //     retirar<long int>(arvore_cpf.raiz, info->cpf, "cpf", info);
-        //     delete info; // Deleta da memoria o valor qua info aponta
-        //     info = nullptr;
-        // }
-        // else
-        // {
-        //     cout << "Nome nao encontrado!";
-        //     return;
-        // }
+        cout << "CPF nao encontrado!";
+        return;
     }
-    else // Error
+}
+
+void retirar(Arvore &arvore_cpf, Arvore &arvore_nome, string chave) // Retira por Nome
+{
+    No *no = buscar<string>(arvore_nome.raiz, chave, "nome");
+    if (no != nullptr) // Verifica se o Nome informado se encontra na arvore
     {
-        cout << "Error: Operacao nao permitida!";
+        Info *info = nullptr;
+        retirar<string>(arvore_nome.raiz, chave, "nome", info);
+        retirar<long int>(arvore_cpf.raiz, info->cpf, "cpf", info);
+        delete info; // Deleta da memoria o valor qua info aponta
+        info = nullptr;
+    }
+    else
+    {
+        cout << "Nome nao encontrado!";
         return;
     }
 }
@@ -352,7 +360,7 @@ void listar(Arvore &arvore_cpf, Arvore &arvore_nome, int operacao)
 
 void deletar(Arvore &arvore_cpf, Arvore &arvore_nome)
 {
-    deletar(arvore_cpf.raiz);
+    deletar(arvore_cpf.raiz, true);
     deletar(arvore_nome.raiz);
 }
 #pragma endregion PSEUDO_FUNCOES
@@ -369,43 +377,100 @@ int main()
     // PS: As 2 arvores sempre terao a mesma qtd de nos, mas a ordenação e altura dos nos serao diferentes
     Arvore arvore_cpf, arvore_nome;
 
-    Info *info = new Info;
-    info->cpf = 4;
-    info->nome = "a";
-    info->profissao = "a";
+    int input_opcao;
+    long int cpf;
+    string nome, profissao;
 
-    inserir(arvore_cpf, arvore_nome, info);
+    do
+    {
+        cout << "+-------------------------+\n"
+             << endl;
+        cout << "Pleno - Sistema para RH\n"
+             << endl;
+        cout << "+-------------------------+"
+             << endl;
+        cout << "1. Inserir" << endl;
+        cout << "2. Remover por CPF" << endl;
+        cout << "3. Remover por Nome" << endl;
+        cout << "4. Pesquisar por CPF" << endl;
+        cout << "5. Pesquisar por Nome" << endl;
+        cout << "6. Listar ordenado por CPF" << endl;
+        cout << "7. Listar ordenado por Nome" << endl;
+        cout << "8. Sair" << endl;
+        cout << "+-------------------------+" << endl;
+        cout << "Opcao: ";
+        cin >> input_opcao;
 
-    Info *info_2 = new Info;
-    info_2->cpf = 3;
-    info_2->nome = "b";
-    info_2->profissao = "a";
+        if (input_opcao == 1)
+        {
+            Info *info = new Info;
+            cout << "Digite o CPF: ";
+            cin >> cpf;
+            cout << "Digite o nome: ";
+            cin.ignore();
+            getline(cin, nome);
+            cout << "Digite a profissao: ";
+            getline(cin, profissao);
+            info->cpf = cpf;
+            info->nome = nome;
+            info->profissao = profissao;
+            inserir(arvore_cpf, arvore_nome, info);
+        }
+        else if (input_opcao == 2)
+        {
+            cout << "Digite o CPF: ";
+            cin >> cpf;
+            retirar(arvore_cpf, arvore_nome, cpf);
+        }
+        else if (input_opcao == 3)
+        {
+            cout << "Digite o nome: ";
+            cin.ignore();
+            getline(cin, nome);
+            retirar(arvore_cpf, arvore_nome, nome);
+        }
+        else if (input_opcao == 4)
+        {
+            cout << "Digite o CPF: ";
+            cin >> cpf;
+            if (buscar<long int>(arvore_cpf.raiz, cpf, "cpf") != nullptr)
+                cout << "CPF encontrado!\n";
+            else
+                cout << "CPF nao encontrado!\n";
+        }
+        else if (input_opcao == 5)
+        {
+            cout << "Digite o nome: ";
+            cin.ignore();
+            getline(cin, nome);
+            if (buscar<string>(arvore_nome.raiz, nome, "nome") != nullptr)
+                cout << "Nome encontrado!\n";
+            else
+                cout << "Nome nao encontrado!\n";
+        }
+        else if (input_opcao == 6)
+        {
+            cout << "Valores ordenados por CPF:" << endl
+                 << endl;
+            listar(arvore_nome, arvore_cpf, 1);
+        }
+        else if (input_opcao == 7)
+        {
+            cout << "Valores ordenados por Nome:" << endl
+                 << endl;
+            listar(arvore_nome, arvore_cpf, 2);
+        }
+        else if (input_opcao == 8)
+        {
+            cout << "Saindo..." << endl;
+            deletar(arvore_cpf, arvore_nome);
+        }
+        else
+        {
+            cout << "Opcao invalida!" << endl;
+        }
 
-    inserir(arvore_cpf, arvore_nome, info_2);
-
-    Info *info_3 = new Info;
-    info_3->cpf = 2;
-    info_3->nome = "c";
-    info_3->profissao = "a";
-
-    inserir(arvore_cpf, arvore_nome, info_3);
-
-    Info *info_4 = new Info;
-    info_4->cpf = 1;
-    info_4->nome = "d";
-    info_4->profissao = "a";
-
-    inserir(arvore_cpf, arvore_nome, info_4);
-
-    retirar(arvore_cpf, arvore_nome, 1, 1);
-
-    listar(arvore_cpf, arvore_nome, 1);
-    listar(arvore_cpf, arvore_nome, 2);
-
-    deletar(arvore_cpf, arvore_nome);
-
-    listar(arvore_cpf, arvore_nome, 1);
-    listar(arvore_cpf, arvore_nome, 2);
+    } while (input_opcao != 8);
 
     return 0;
 }
