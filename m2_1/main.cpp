@@ -267,7 +267,7 @@ No *retirar(No *&raiz, T chave, string nome_do_campo, Info *&info) // O info ser
 }
 
 // Caminhamento Infixado
-void listar(No *&raiz)
+void listar(No *raiz)
 {
     // In => Esq, Raiz, Dir
     if (raiz == nullptr) // Se esse no não existir sai da função
@@ -478,7 +478,7 @@ int main()
         {
             cout << "Valores ordenados por CPF:" << endl
                  << endl;
-            listar(arvore_nome, arvore_cpf, 1);
+            listar(arvore_cpf, arvore_nome, 1);
 
             cout << "Precione Enter tecla para continuar..." << endl;
             cin.ignore();
@@ -488,7 +488,7 @@ int main()
         {
             cout << "Valores ordenados por Nome:" << endl
                  << endl;
-            listar(arvore_nome, arvore_cpf, 2);
+            listar(arvore_cpf, arvore_nome, 2);
 
             cout << "Precione Enter tecla para continuar..." << endl;
             cin.ignore();
