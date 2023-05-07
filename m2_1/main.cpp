@@ -224,7 +224,7 @@ No *retirar(No *&raiz, T chave, string nome_do_campo, Info *&info) // O info ser
     if (chave == get_struct_campo<T>(raiz->info, nome_do_campo))
     {
         info = raiz->info; // Armazena a Info atual, para ser usada posterioremente
-
+        raiz->info == nullptr;
         if (raiz->esq == nullptr && raiz->dir == nullptr)
             return nullptr;
 
@@ -310,14 +310,17 @@ void retirar(Arvore &arvore_cpf, Arvore &arvore_nome, long int chave) // Retira 
     if (no != nullptr) // Verifica se o CPF informado se encontra na arvore
     {
         Info *info = nullptr;
-        retirar<long int>(arvore_cpf.raiz, chave, "cpf", info);
-        retirar<string>(arvore_nome.raiz, info->nome, "nome", info);
+        arvore_cpf.raiz = retirar<long int>(arvore_cpf.raiz, chave, "cpf", info);
+        arvore_nome.raiz = retirar<string>(arvore_nome.raiz, info->nome, "nome", info);
         delete info; // Deleta da memoria o valor qua info aponta
         info = nullptr;
     }
     else
     {
-        cout << "CPF nao encontrado!";
+        cout << "+-------------------------+" << endl;
+        cout << "| CPF nao encontrado!\n";
+        cout << "+-------------------------+" << endl;
+
         return;
     }
 }
@@ -328,14 +331,17 @@ void retirar(Arvore &arvore_cpf, Arvore &arvore_nome, string chave) // Retira po
     if (no != nullptr) // Verifica se o Nome informado se encontra na arvore
     {
         Info *info = nullptr;
-        retirar<string>(arvore_nome.raiz, chave, "nome", info);
-        retirar<long int>(arvore_cpf.raiz, info->cpf, "cpf", info);
+        arvore_nome.raiz = retirar<string>(arvore_nome.raiz, chave, "nome", info);
+        arvore_cpf.raiz = retirar<long int>(arvore_cpf.raiz, info->cpf, "cpf", info);
         delete info; // Deleta da memoria o valor qua info aponta
         info = nullptr;
     }
     else
     {
-        cout << "Nome nao encontrado!";
+        cout << "+-------------------------+" << endl;
+        cout << "| Nome nao encontrado!\n";
+        cout << "+-------------------------+" << endl;
+
         return;
     }
 }
@@ -410,6 +416,7 @@ int main()
             info->nome = nome;
             info->profissao = profissao;
             inserir(arvore_cpf, arvore_nome, info);
+
             cout << "Precione Enter tecla para continuar..." << endl;
             cin.get();
         }
@@ -418,6 +425,7 @@ int main()
             cout << "Digite o CPF: ";
             cin >> cpf;
             retirar(arvore_cpf, arvore_nome, cpf);
+
             cout << "Precione Enter tecla para continuar..." << endl;
             cin.get();
         }
@@ -427,6 +435,7 @@ int main()
             cin.ignore();
             getline(cin, nome);
             retirar(arvore_cpf, arvore_nome, nome);
+
             cout << "Precione Enter tecla para continuar..." << endl;
             cin.get();
         }
@@ -439,8 +448,8 @@ int main()
             else
                 cout << "CPF nao encontrado!\n";
 
-            cin.ignore();
             cout << "Precione Enter tecla para continuar..." << endl;
+            cin.ignore();
             cin.get();
         }
         else if (input_opcao == 5)
@@ -470,8 +479,8 @@ int main()
                  << endl;
             listar(arvore_nome, arvore_cpf, 1);
 
-            cin.ignore();
             cout << "Precione Enter tecla para continuar..." << endl;
+            cin.ignore();
             cin.get();
         }
         else if (input_opcao == 7)
@@ -480,8 +489,8 @@ int main()
                  << endl;
             listar(arvore_nome, arvore_cpf, 2);
 
-            cin.ignore();
             cout << "Precione Enter tecla para continuar..." << endl;
+            cin.ignore();
             cin.get();
         }
         else if (input_opcao == 8)
