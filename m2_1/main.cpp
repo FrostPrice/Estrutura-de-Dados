@@ -427,6 +427,7 @@ int main()
             retirar(arvore_cpf, arvore_nome, cpf);
 
             cout << "Precione Enter tecla para continuar..." << endl;
+            cin.ignore();
             cin.get();
         }
         else if (input_opcao == 3)
@@ -502,6 +503,7 @@ int main()
         {
             cout << "Opcao invalida!" << endl;
             cout << "Precione Enter tecla para continuar..." << endl;
+            cin.ignore();
             cin.get();
         }
 
