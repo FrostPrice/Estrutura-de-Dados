@@ -23,9 +23,6 @@ struct Arvore
 };
 #pragma endregion ESTRUTURAS
 
-#pragma region AVL
-#pragma endregion AVL
-
 #pragma region FUNCOES
 // TODO:
 // Inserir uma nova informação; - OK
@@ -49,60 +46,54 @@ void buscar_maior_cpf(No *raiz, Info *info)
     }
 }
 
-void buscar_maior_nome(No *raiz, string &chave, Info *info)
+void buscar_maior_nome(No *raiz, Info *info)
 {
     if (raiz == nullptr)
         return;
 
     if (raiz->dir != nullptr)
     {
-        buscar_maior_nome(raiz->dir, chave, info);
+        buscar_maior_nome(raiz->dir, info);
     }
     else
     {
-        chave = raiz->info->nome;
         info = raiz->info;
+        cout << info->nome << endl;
     }
 }
 
 // Pesquisa por cpf
-No *buscar(No *raiz_cpf, long int cpf)
+bool buscar(No *raiz_cpf, long int cpf)
 {
     if (raiz_cpf == nullptr)
     {
-        cout << "CPF nao encontrado!" << endl;
-        return nullptr;
+        return false;
     }
 
-    if (cpf == raiz_cpf->info->cpf)
+    if (raiz_cpf->info != nullptr && cpf == raiz_cpf->info->cpf)
     {
         cout << "CPF encontrado!" << endl;
-        return raiz_cpf;
+        return true;
     }
-    else if (cpf < raiz_cpf->info->cpf)
-        buscar(raiz_cpf->esq, cpf);
-    else
-        buscar(raiz_cpf->dir, cpf);
+
+    return buscar(raiz_cpf->esq, cpf) || buscar(raiz_cpf->dir, cpf);
 }
 
 // Pesquisa por nome
-No *buscar(No *raiz_nome, string nome)
+bool buscar(No *raiz_nome, string nome)
 {
     if (raiz_nome == nullptr)
     {
-        cout << "Nome nao encontrado!" << endl;
-        return nullptr;
+        return false;
     }
 
-    if (nome == raiz_nome->info->nome)
+    if (raiz_nome->info != nullptr && nome == raiz_nome->info->nome)
     {
-        cout << "Nome encontrado!" << endl;
-        return raiz_nome;
+        cout << "CPF encontrado!" << endl;
+        return true;
     }
-    else if (nome < raiz_nome->info->nome)
-        buscar(raiz_nome->esq, nome);
-    else
-        buscar(raiz_nome->dir, nome);
+
+    return buscar(raiz_nome->esq, nome) || buscar(raiz_nome->dir, nome);
 }
 
 // Insere em uma unica arvore
@@ -127,12 +118,14 @@ No *inserir_cpf(No *&raiz_cpf, Info *info)
     }
     else if (info->cpf < raiz_cpf->info->cpf)
     {
-        inserir_cpf(raiz_cpf->esq, info);
+        raiz_cpf->esq = inserir_cpf(raiz_cpf->esq, info);
     }
     else
     {
-        inserir_cpf(raiz_cpf->dir, info);
+        raiz_cpf->dir = inserir_cpf(raiz_cpf->dir, info);
     }
+
+    return raiz_cpf;
 }
 
 // Insere em uma unica arvore
@@ -140,7 +133,6 @@ No *inserir_nome(No *&raiz_nome, Info *info)
 {
     if (raiz_nome == nullptr)
     {
-
         No *no = new No;
         no->info = info;
         no->esq = nullptr;
@@ -158,12 +150,14 @@ No *inserir_nome(No *&raiz_nome, Info *info)
     }
     else if (info->nome < raiz_nome->info->nome)
     {
-        inserir_nome(raiz_nome->esq, info);
+        raiz_nome->esq = inserir_nome(raiz_nome->esq, info);
     }
     else
     {
-        inserir_nome(raiz_nome->dir, info);
+        raiz_nome->dir = inserir_nome(raiz_nome->dir, info);
     }
+
+    return raiz_nome;
 }
 
 // Retirar de uma unica arvore
@@ -178,27 +172,21 @@ No *retirar_cpf(No *&raiz_cpf, long int cpf)
         raiz_cpf->info = nullptr;
         if (raiz_cpf->esq == nullptr && raiz_cpf->dir == nullptr)
         {
-            cout << "A";
             return nullptr;
         }
         if (raiz_cpf->esq != nullptr && raiz_cpf->dir == nullptr)
         {
-            cout << "B";
             return raiz_cpf->esq;
         }
         if (raiz_cpf->esq == nullptr && raiz_cpf->dir != nullptr)
         {
-            cout << "C";
             return raiz_cpf->dir;
         }
+
         long int aux_cpf;
         Info *aux_info;
-        cout << "A" << aux_cpf;
-        cout << "V" << aux_info;
         buscar_maior_cpf(raiz_cpf->esq, aux_info);
-        cout << "A" << aux_cpf;
-        cout << "V" << aux_info;
-
+        aux_cpf = aux_info->cpf;
         raiz_cpf->info = aux_info;
         raiz_cpf->esq = retirar_cpf(raiz_cpf->esq, aux_cpf);
         return raiz_cpf;
@@ -208,7 +196,43 @@ No *retirar_cpf(No *&raiz_cpf, long int cpf)
         raiz_cpf->esq = retirar_cpf(raiz_cpf->esq, cpf);
     else
         raiz_cpf->dir = retirar_cpf(raiz_cpf->dir, cpf);
+
     return raiz_cpf;
+}
+
+// Retirar de uma unica arvore
+No *retirar_nome(No *&raiz_nome, string nome)
+{
+    if (raiz_nome == nullptr)
+        return nullptr;
+
+    if (raiz_nome->info->nome == nome)
+    {
+        delete raiz_nome->info;
+        raiz_nome->info = nullptr;
+
+        if (raiz_nome->esq == nullptr && raiz_nome->dir == nullptr)
+        {
+            return nullptr;
+        }
+        if (raiz_nome->esq != nullptr && raiz_nome->dir == nullptr)
+        {
+            return raiz_nome->esq;
+        }
+        if (raiz_nome->esq == nullptr && raiz_nome->dir != nullptr)
+        {
+            return raiz_nome->dir;
+        }
+
+        return raiz_nome;
+    }
+
+    if (nome < raiz_nome->info->nome)
+        raiz_nome->esq = retirar_nome(raiz_nome->esq, nome);
+    else
+        raiz_nome->dir = retirar_nome(raiz_nome->dir, nome);
+
+    return raiz_nome;
 }
 
 // Caminhamento Infixado
@@ -219,7 +243,10 @@ void listar_cpf(No *&raiz_cpf)
         return;
 
     listar_cpf(raiz_cpf->esq); // Na raiz atual, vai para a esquerda
-    cout << raiz_cpf->info->cpf << "\t" << raiz_cpf->info->nome << "\t" << raiz_cpf->info->profissao << endl;
+    if (raiz_cpf->info != nullptr)
+    {
+        cout << raiz_cpf->info->cpf << "\t" << raiz_cpf->info->nome << "\t" << raiz_cpf->info->profissao << endl;
+    }
     listar_cpf(raiz_cpf->dir); // Na raiz atual, vai para a direita
 }
 
@@ -230,7 +257,10 @@ void listar_nome(No *&raiz_nome)
     if (raiz_nome == nullptr) // Se esse no não existir sai da função
         return;
 
-    cout << raiz_nome->info->cpf << "\t" << raiz_nome->info->nome << "\t" << raiz_nome->info->profissao << endl;
+    if (raiz_nome->info != nullptr)
+    {
+        cout << raiz_nome->info->cpf << "\t" << raiz_nome->info->nome << "\t" << raiz_nome->info->profissao << endl;
+    }
     listar_nome(raiz_nome->esq); // Na raiz atual, vai para a esquerda
     listar_nome(raiz_nome->dir); // Na raiz atual, vai para a direita
 }
@@ -274,53 +304,54 @@ int main()
 
     Info *info = new Info;
     info->cpf = 4;
-    info->nome = "a";
-    info->profissao = "a";
+    info->nome = "b";
+    info->profissao = "e";
 
     inserir(arvore_cpf, arvore_nome, info);
 
     Info *info_2 = new Info;
     info_2->cpf = 3;
-    info_2->nome = "B";
-    info_2->profissao = "a";
+    info_2->nome = "A";
+    info_2->profissao = "e";
 
     inserir(arvore_cpf, arvore_nome, info_2);
 
     Info *info_3 = new Info;
     info_3->cpf = 2;
-    info_3->nome = "c";
-    info_3->profissao = "a";
+    info_3->nome = "d";
+    info_3->profissao = "e";
 
     inserir(arvore_cpf, arvore_nome, info_3);
 
     Info *info_4 = new Info;
     info_4->cpf = 1;
-    info_4->nome = "d";
-    info_4->profissao = "a";
+    info_4->nome = "c";
+    info_4->profissao = "e";
 
     inserir(arvore_cpf, arvore_nome, info_4);
 
-    retirar(arvore_cpf, 4);
+    // retirar(arvore_cpf, 1);
 
-    buscar(arvore_cpf.raiz, 4);
     // buscar(arvore_cpf.raiz, 2);
     // buscar(arvore_cpf.raiz, 3);
     // buscar(arvore_cpf.raiz, 4);
     // buscar(arvore_cpf.raiz, 5);
 
-    // buscar(arvore_nome.raiz, "a");
-    // buscar(arvore_nome.raiz, "B");
-    // buscar(arvore_nome.raiz, "c");
-    // buscar(arvore_nome.raiz, "d");
-    // buscar(arvore_nome.raiz, "z");
+    retirar_nome(arvore_nome.raiz, "A");
+
+    buscar(arvore_nome.raiz, "A");
+    buscar(arvore_nome.raiz, "b");
+    buscar(arvore_nome.raiz, "c");
+    buscar(arvore_nome.raiz, "d");
+    buscar(arvore_nome.raiz, "z");
 
     // listar_info(arvore_cpf, arvore_nome, 1);
-    // listar_info(arvore_cpf, arvore_nome, 2);
+    listar_info(arvore_cpf, arvore_nome, 2);
 
-    delete info;
-    delete info_2;
-    delete info_3;
-    delete info_4;
+    // delete info;
+    // delete info_2;
+    // delete info_3;
+    // delete info_4;
 
     return 0;
 }

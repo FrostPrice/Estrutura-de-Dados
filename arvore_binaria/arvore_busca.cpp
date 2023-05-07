@@ -212,30 +212,34 @@ int main()
     inserir(arvore, 45, 45);
     inserir(arvore, 60, 60);
     inserir(arvore, 47, 47);
+    prefixado(arvore.raiz);
+    cout << endl;
+
+    retirar(arvore, 50);
 
     prefixado(arvore.raiz);
     cout << endl;
 
-    cout << buscar(arvore.raiz, 45);
-    cout << endl;
+    // cout << buscar(arvore.raiz, 45);
+    // cout << endl;
 
-    int chave, aux;
-    buscar_menor(arvore.raiz, chave, aux);
-    cout << "Menor valor e chave: " << aux << " (" << chave << ") " << endl;
+    // int chave, aux;
+    // buscar_menor(arvore.raiz, chave, aux);
+    // cout << "Menor valor e chave: " << aux << " (" << chave << ") " << endl;
 
-    buscar_maior(arvore.raiz, chave, aux);
-    cout << "Maior valor e chave: " << aux << " (" << chave << ") " << endl;
+    // buscar_maior(arvore.raiz, chave, aux);
+    // cout << "Maior valor e chave: " << aux << " (" << chave << ") " << endl;
 
-    cout << buscar(arvore.raiz, 47);
-    cout << endl;
+    // cout << buscar(arvore.raiz, 47);
+    // cout << endl;
 
-    retirar(arvore, 47);
+    // retirar(arvore, 47);
 
-    prefixado(arvore.raiz);
-    cout << endl;
+    // prefixado(arvore.raiz);
+    // cout << endl;
 
-    cout << "Altura da arvore: " << calc_altura(arvore) << endl;
-    cout << "Qtd. de Nos na arvore: " << calc_qtd_nos(arvore) << endl;
+    // cout << "Altura da arvore: " << calc_altura(arvore) << endl;
+    // cout << "Qtd. de Nos na arvore: " << calc_qtd_nos(arvore) << endl;
 
     return 0;
 }

@@ -8,8 +8,6 @@ using namespace std;
 
 #include "string"
 #include "iostream"
-#include <cctype>
-#include <type_traits>
 
 #pragma region ESTRUTURAS
 struct Info
@@ -64,14 +62,14 @@ int get_altura(No *raiz)
     return (raiz == nullptr) ? 0 : raiz->altura;
 }
 
-void buscar_maior(No *raiz, Info *&info, string nome_do_campo)
+void buscar_maior(No *raiz, Info *&info)
 {
     if (raiz == nullptr)
         return;
 
     if (raiz->dir != nullptr)
     {
-        buscar_maior(raiz->dir, info, nome_do_campo);
+        buscar_maior(raiz->dir, info);
     }
     else
     {
@@ -235,7 +233,7 @@ No *retirar(No *&raiz, T chave, string nome_do_campo, Info *&info) // O info ser
             return raiz->dir;
 
         Info *aux_info;
-        buscar_maior(raiz->esq, aux_info, nome_do_campo);
+        buscar_maior(raiz->esq, aux_info);
         raiz->info = aux_info;
         raiz->esq = retirar<T>(raiz->esq, get_struct_campo<T>(aux_info, nome_do_campo), nome_do_campo, aux_info); // O aux_info dessa funcao nao tem utilidade
 
@@ -367,13 +365,6 @@ void deletar(Arvore &arvore_cpf, Arvore &arvore_nome)
 
 int main()
 {
-    // TODO:
-    // Inserir uma nova informação; - OK
-    // Remover um registro pesquisando por CPF ou por nome; - OK
-    // Pesquisar um registro por CPF ou por nome; - OK
-    // Listar todos as informações cadastradas (como se fosse um relatório, mas em tela) de forma ordenada por nome ou cpf; - OK
-    // Ao encerrar a aplicação, todas as posições/espaços de memória alocados devem ser liberados; - OK
-
     // PS: As 2 arvores sempre terao a mesma qtd de nos, mas a ordenação e altura dos nos serao diferentes
     Arvore arvore_cpf, arvore_nome;
 
