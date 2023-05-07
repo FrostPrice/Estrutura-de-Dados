@@ -176,9 +176,9 @@ No *buscar(No *raiz, T chave, string nome_do_campo)
         return raiz;
 
     if (chave < get_struct_campo<T>(raiz->info, nome_do_campo))
-        buscar<T>(raiz->esq, chave, nome_do_campo);
+        return buscar<T>(raiz->esq, chave, nome_do_campo);
     else
-        buscar<T>(raiz->dir, chave, nome_do_campo);
+        return buscar<T>(raiz->dir, chave, nome_do_campo);
 }
 
 template <typename T>
@@ -194,7 +194,9 @@ No *inserir(No *&raiz, T chave, string nome_do_campo, Info *info)
 
     if (chave == get_struct_campo<T>(raiz->info, nome_do_campo))
     {
-        cout << nome_do_campo << " duplicado!" << endl;
+        cout << "+-------------------------+" << endl;
+        cout << "| Warning: " << nome_do_campo << " Duplicado!" << endl;
+        cout << "+-------------------------+" << endl;
         return nullptr;
     }
     else if (chave < get_struct_campo<T>(raiz->info, nome_do_campo))
@@ -374,8 +376,10 @@ int main()
 
     do
     {
-        cout << "+-------------------------+\n"
-             << endl;
+        system("cls || clear");
+        cout
+            << "+-------------------------+\n"
+            << endl;
         cout << "Pleno - Sistema para RH\n"
              << endl;
         cout << "+-------------------------+"
@@ -406,12 +410,16 @@ int main()
             info->nome = nome;
             info->profissao = profissao;
             inserir(arvore_cpf, arvore_nome, info);
+            cout << "Precione Enter tecla para continuar..." << endl;
+            cin.get();
         }
         else if (input_opcao == 2)
         {
             cout << "Digite o CPF: ";
             cin >> cpf;
             retirar(arvore_cpf, arvore_nome, cpf);
+            cout << "Precione Enter tecla para continuar..." << endl;
+            cin.get();
         }
         else if (input_opcao == 3)
         {
@@ -419,6 +427,8 @@ int main()
             cin.ignore();
             getline(cin, nome);
             retirar(arvore_cpf, arvore_nome, nome);
+            cout << "Precione Enter tecla para continuar..." << endl;
+            cin.get();
         }
         else if (input_opcao == 4)
         {
@@ -428,6 +438,10 @@ int main()
                 cout << "CPF encontrado!\n";
             else
                 cout << "CPF nao encontrado!\n";
+
+            cin.ignore();
+            cout << "Precione Enter tecla para continuar..." << endl;
+            cin.get();
         }
         else if (input_opcao == 5)
         {
@@ -435,21 +449,40 @@ int main()
             cin.ignore();
             getline(cin, nome);
             if (buscar<string>(arvore_nome.raiz, nome, "nome") != nullptr)
-                cout << "Nome encontrado!\n";
+            {
+                cout << "+-------------------------+" << endl;
+                cout << "| Nome encontrado!\n";
+                cout << "+-------------------------+" << endl;
+            }
             else
-                cout << "Nome nao encontrado!\n";
+            {
+                cout << "+-------------------------+" << endl;
+                cout << "| Nome nao encontrado!\n";
+                cout << "+-------------------------+" << endl;
+            }
+
+            cout << "Precione Enter tecla para continuar..." << endl;
+            cin.get();
         }
         else if (input_opcao == 6)
         {
             cout << "Valores ordenados por CPF:" << endl
                  << endl;
             listar(arvore_nome, arvore_cpf, 1);
+
+            cin.ignore();
+            cout << "Precione Enter tecla para continuar..." << endl;
+            cin.get();
         }
         else if (input_opcao == 7)
         {
             cout << "Valores ordenados por Nome:" << endl
                  << endl;
             listar(arvore_nome, arvore_cpf, 2);
+
+            cin.ignore();
+            cout << "Precione Enter tecla para continuar..." << endl;
+            cin.get();
         }
         else if (input_opcao == 8)
         {
@@ -459,6 +492,8 @@ int main()
         else
         {
             cout << "Opcao invalida!" << endl;
+            cout << "Precione Enter tecla para continuar..." << endl;
+            cin.get();
         }
 
     } while (input_opcao != 8);
