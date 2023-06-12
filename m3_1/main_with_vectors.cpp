@@ -5,6 +5,7 @@ using namespace std;
 #include <iomanip>
 #include <string>
 #include <chrono>
+#include <vector>
 
 #pragma region ORDENACAO
 void shell(int vetor[], int tam)
@@ -189,22 +190,16 @@ void mergesort(int vetor[], int inicio, int fim)
 }
 #pragma endregion ORDENACAO
 
-int *preencher_aleatorio(int tam) // Preenche somente um vetor
+void preencher_aleatorio(vector<int> &vetor, int tam) // Preenche somente um vetor
 {
-    int *vetor = new int[tam];
     for (int i = 0; i < tam; i++)
         vetor[i] = rand() % tam;
-
-    return vetor;
 }
 
-int **preencher(int qtd_vetores, int qtd_elementos) // Preenche a matriz
+void preencher(vector<vector<int>> &matriz, int qtd_vetores, int qtd_elementos) // Preenche a matriz
 {
     srand(time(NULL));
-    int **matriz = new int *[qtd_vetores];
 
-    matriz[0] = new int[qtd_elementos];
-    matriz[1] = new int[qtd_elementos];
     for (int i = 0; i < qtd_elementos; i++)
     {
         matriz[0][i] = i;                       // Vetor ja ordenado
@@ -214,10 +209,8 @@ int **preencher(int qtd_vetores, int qtd_elementos) // Preenche a matriz
     for (int i = 2; i < qtd_vetores; i++)
     {
         cout << "Randomizando vetor " << i << " ...\n";
-        matriz[i] = preencher_aleatorio(qtd_elementos);
+        preencher_aleatorio(matriz[i], qtd_elementos);
     }
-
-    return matriz;
 }
 
 void mostrar(int *vetor, int tam, string rotulo) // Mostra somente um vetor
@@ -250,15 +243,9 @@ void mostrar(int **matriz, int qtd_vetores, int qtd_elementos) // Mostra a matri
     cout << endl;
 }
 
-void deletar(int **matriz, int qtd_vetores)
+void deletar(vector<vector<int>> matriz, int qtd_vetores)
 {
-    if (matriz == nullptr)
-        return;
-
-    for (int i = 0; i < qtd_vetores; i++)
-        delete[] matriz[i];
-
-    delete[] matriz;
+    matriz.clear(); // Limpa o vetor
 }
 
 // TODO: Exportar para .csv
@@ -283,7 +270,7 @@ void ordenar(double **resultados, int **matriz, int qtd_vetores, int qtd_element
 void menu()
 {
     int input_opcao, qtd_vetores, qtd_elementos, numero_execucao;
-    int **matriz = nullptr; // PS: Tera no minimio 3 vetores (um ordenado, um invertido e um aleatório)
+    vector<vector<int>> matriz(3); // PS: Tera no minimio 3 vetores (um ordenado, um invertido e um aleatório)
     double **resultados = nullptr;
 
     do
@@ -323,9 +310,9 @@ void menu()
                 cin >> numero_execucao;
             } while (numero_execucao < 1 || numero_execucao > __INT_MAX__);
 
-            matriz = preencher(qtd_vetores, qtd_elementos);
+            preencher(matriz, qtd_vetores, qtd_elementos);
 
-            ordenar(resultados, matriz, qtd_vetores, qtd_elementos, numero_execucao);
+            // ordenar(resultados, matriz, qtd_vetores, qtd_elementos, numero_execucao);
 
             cin.ignore();
             cout << "Precione Enter tecla para continuar..." << endl;
