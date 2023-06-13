@@ -2,6 +2,10 @@
   "files.associations": {
     "*.py": "python",
     "ostream": "cpp",
-    "iostream": "cpp"
+    "iostream": "cpp",
+    "iomanip": "cpp",
+    "bitset": "cpp",
+    "string_view": "cpp",
+    "regex": "cpp"
   }
 }

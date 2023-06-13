@@ -248,7 +248,8 @@ void preencher(vector<vector<int>> &matriz, int qtd_vetores, int qtd_elementos) 
     }
 }
 
-void mostrar(vector<int> vetor, string rotulo) // Mostra somente um vetor
+template <typename T>
+void mostrar(vector<T> vetor) // Mostra somente um vetor
 {
     if (vetor.empty())
     {
@@ -256,13 +257,12 @@ void mostrar(vector<int> vetor, string rotulo) // Mostra somente um vetor
         return;
     }
 
-    cout << rotulo << ":\t";
-    int espaco_entre_elementos = to_string(vetor.size()).length() + 1;
     for (int i = 0; i < vetor.size(); i++)
-        cout << setw(espaco_entre_elementos) << vetor[i];
+        cout << setw(10) << fixed << setprecision(15) << vetor[i] << "\t";
 }
 
-void mostrar(vector<vector<int>> matriz) // Mostra a matriz
+template <typename T>
+void mostrar(vector<vector<T>> matriz) // Mostra a matriz
 {
     if (matriz.empty())
     {
@@ -270,9 +270,16 @@ void mostrar(vector<vector<int>> matriz) // Mostra a matriz
         return;
     }
 
+    vector<string> nome_funcoes = {"Shell", "ShellSort", "Bubble", "QuickSort", "SelectionSort", "MergeSort"};
+
+    cout << setw(16) << left << "Funcao";
+    cout << setw(24) << left << "Melhor Caso";
+    cout << setw(24) << left << "Media dos Casos";
+    cout << "Pior Caso\n";
     for (int i = 0; i < matriz.size(); i++)
     {
-        mostrar(matriz[i], "Vetor " + to_string(i));
+        cout << setw(10) << left << nome_funcoes[i] << "\t";
+        mostrar(matriz[i]);
         cout << endl;
     }
     cout << endl;
@@ -308,6 +315,7 @@ void exportar_para_csv(string nome_do_arquivo, string cabecalho, vector<vector<d
             arquivo << "\n"; // Termina linha
         }
         arquivo.close();
+        cout << "Arquivo exportado com sucesso (./" << nome_do_arquivo << ".csv)\n";
     }
     else
     {
@@ -421,9 +429,15 @@ void menu()
 
             preencher(matriz, qtd_vetores, qtd_elementos);
 
+            cout << "\nIniciando Algoritmos de Ordenacao.... Isso pode demorar um pouco...\n";
             ordenar(resultados, matriz, qtd_vetores, qtd_elementos, numero_execucao);
 
+            cout << endl;
+
             exportar_para_csv("resultados", "funcao,melhor_caso,media_dos_casos,pior_caso", resultados);
+
+            cout << "\nResultado: \n";
+            mostrar(resultados);
 
             cin.ignore();
             cout << "Precione Enter tecla para continuar..." << endl;
