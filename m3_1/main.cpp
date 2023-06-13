@@ -5,6 +5,10 @@ using namespace std;
 #include <iomanip>
 #include <string>
 #include <chrono>
+#include <vector>
+#include <functional>
+#include <iostream>
+#include <fstream>
 
 #pragma region ORDENACAO
 void shell(int vetor[], int tam)
@@ -28,7 +32,7 @@ void shellsort(int vetor[], int inicio, int salto, int tam)
     int j, k, temp;
     bool achei;
 
-    for (int i = (inicio + salto); i < sizeof(vetor) / sizeof(int); i += salto)
+    for (int i = (inicio + salto); i < tam; i += salto)
     {
         j = inicio;
         achei = false;
@@ -189,22 +193,48 @@ void mergesort(int vetor[], int inicio, int fim)
 }
 #pragma endregion ORDENACAO
 
-int *preencher_aleatorio(int tam) // Preenche somente um vetor
+#pragma region PSEUDO_ORDENACAO // Funcoes usadas para padronizar as assinaturas das funcoes
+void shell(vector<int> vetor)
 {
-    int *vetor = new int[tam];
-    for (int i = 0; i < tam; i++)
-        vetor[i] = rand() % tam;
-
-    return vetor;
+    shell(vetor.data(), vetor.size());
 }
 
-int **preencher(int qtd_vetores, int qtd_elementos) // Preenche a matriz
+void shellsort(vector<int> vetor)
 {
-    srand(time(NULL));
-    int **matriz = new int *[qtd_vetores];
+    shellsort(vetor.data(), 3, vetor.size());
+}
 
-    matriz[0] = new int[qtd_elementos];
-    matriz[1] = new int[qtd_elementos];
+void bubble(vector<int> vetor)
+{
+    bubble(vetor.data(), vetor.size());
+}
+
+void quicksort(vector<int> vetor)
+{
+    quicksort(vetor.data(), 0, vetor.size());
+}
+
+void selectionsort(vector<int> vetor)
+{
+    selectionsort(vetor.data(), vetor.size());
+}
+
+void mergesort(vector<int> vetor)
+{
+    mergesort(vetor.data(), 0, vetor.size() - 1);
+}
+#pragma endregion PSEUDO_ORDENACAO
+
+void preencher_aleatorio(vector<int> &vetor, int tam) // Preenche somente um vetor
+{
+    for (int i = 0; i < tam; i++)
+        vetor[i] = rand() % tam;
+}
+
+void preencher(vector<vector<int>> &matriz, int qtd_vetores, int qtd_elementos) // Preenche a matriz
+{
+    matriz.resize(qtd_vetores, vector<int>(qtd_elementos));
+
     for (int i = 0; i < qtd_elementos; i++)
     {
         matriz[0][i] = i;                       // Vetor ja ordenado
@@ -214,77 +244,143 @@ int **preencher(int qtd_vetores, int qtd_elementos) // Preenche a matriz
     for (int i = 2; i < qtd_vetores; i++)
     {
         cout << "Randomizando vetor " << i << " ...\n";
-        matriz[i] = preencher_aleatorio(qtd_elementos);
+        preencher_aleatorio(matriz[i], qtd_elementos);
     }
-
-    return matriz;
 }
 
-void mostrar(int *vetor, int tam, string rotulo) // Mostra somente um vetor
+void mostrar(vector<int> vetor, string rotulo) // Mostra somente um vetor
 {
-    if (vetor == nullptr)
+    if (vetor.empty())
     {
         cout << "Vetor nao foi criado\n";
         return;
     }
 
     cout << rotulo << ":\t";
-    int espaco_entre_elementos = to_string(tam).length() + 1;
-    for (int i = 0; i < tam; i++)
+    int espaco_entre_elementos = to_string(vetor.size()).length() + 1;
+    for (int i = 0; i < vetor.size(); i++)
         cout << setw(espaco_entre_elementos) << vetor[i];
 }
 
-void mostrar(int **matriz, int qtd_vetores, int qtd_elementos) // Mostra a matriz
+void mostrar(vector<vector<int>> matriz) // Mostra a matriz
 {
-    if (matriz == nullptr)
+    if (matriz.empty())
     {
         cout << "Matriz nao foi criado\n";
         return;
     }
 
-    for (int i = 0; i < qtd_vetores; i++)
+    for (int i = 0; i < matriz.size(); i++)
     {
-        mostrar(matriz[i], qtd_elementos, "Vetor " + to_string(i));
+        mostrar(matriz[i], "Vetor " + to_string(i));
         cout << endl;
     }
     cout << endl;
 }
 
-void deletar(int **matriz, int qtd_vetores)
+void deletar(vector<vector<int>> matriz, int qtd_vetores)
 {
-    if (matriz == nullptr)
-        return;
-
-    for (int i = 0; i < qtd_vetores; i++)
-        delete[] matriz[i];
-
-    delete[] matriz;
+    matriz.clear(); // Limpa o vetor
 }
 
-// TODO: Exportar para .csv
-
-// TODO: Realizar ordenacoes
-// TODO: Padronizar assinaturas das funcoes de ordenacao
-void ordenar(double **resultados, int **matriz, int qtd_vetores, int qtd_elementos, int numero_execucoes)
+void exportar_para_csv(string nome_do_arquivo, string cabecalho, vector<vector<double>> matriz)
 {
-    for (int i = 0; i < numero_execucoes; i++)
+    cout << "Exportando resultados para o arquivo: " << nome_do_arquivo << ".csv\n";
+
+    ofstream arquivo("./resultados.csv");
+
+    if (arquivo.is_open())
     {
-        chrono::high_resolution_clock::time_point inicio = chrono::high_resolution_clock::now();
+        vector<string> nome_funcoes = {"Shell", "ShellSort", "Bubble", "QuickSort", "SelectionSort", "MergeSort"};
 
-        // Algoritmo de ordenacao
+        arquivo << cabecalho << "\n";
+        for (int i = 0; i < matriz.size(); i++)
+        {
+            arquivo << nome_funcoes[i] << ",";
+            for (int j = 0; j < matriz[i].size(); j++)
+            {
+                arquivo << fixed << setprecision(15) << matriz[i][j]; // Escreve informacao no arquivo
 
-        chrono::high_resolution_clock::time_point fim = chrono::high_resolution_clock::now();
-        chrono::duration<double> duracao = chrono::duration_cast<std::chrono::duration<double>>(fim - inicio);
-        cout << fixed << setprecision(9) << duracao.count() << endl;
+                // Escreve separacao por virgula
+                if (j < matriz[i].size() - 1)
+                    arquivo << ",";
+            }
+            arquivo << "\n"; // Termina linha
+        }
+        arquivo.close();
+    }
+    else
+    {
+        cout << "Error: Nao foi possivel abrir o arquivo!\n";
+    }
+}
+
+void ordenar(vector<vector<double>> &resultados, vector<vector<int>> matriz, int qtd_vetores, int qtd_elementos, int numero_execucoes)
+{
+    vector<string> nome_funcoes = {"Shell", "ShellSort", "Bubble", "QuickSort", "SelectionSort", "MergeSort"}; // Vetor usado somente para mostrar output para o usuario
+    // Vetor contendo todas as funcoes de ordenacao usadas
+    vector<function<void(vector<int>)>> funcoes = {
+        [](vector<int> vetor)
+        { shell(vetor); },
+        [](vector<int> vetor)
+        { shellsort(vetor); },
+        [](vector<int> vetor)
+        { bubble(vetor); },
+        [](vector<int> vetor)
+        { quicksort(vetor); },
+        [](vector<int> vetor)
+        { selectionsort(vetor); },
+        [](vector<int> vetor)
+        { mergesort(vetor); }};
+
+    for (int f = 0; f < funcoes.size(); f++)
+    {
+        vector<double> resultado_funcao; // Tempo de execucao de todas as iteracoes da funcao atual
+        for (int i = 0; i < numero_execucoes; i++)
+        {
+            for (int j = 0; j < matriz.size(); j++)
+            {
+                chrono::high_resolution_clock::time_point inicio = chrono::high_resolution_clock::now();
+
+                // Algoritmo de ordenacao
+                funcoes[f](matriz[j]);
+
+                chrono::high_resolution_clock::time_point fim = chrono::high_resolution_clock::now();
+                chrono::duration<double> duracao = chrono::duration_cast<std::chrono::duration<double>>(fim - inicio);
+                resultado_funcao.push_back(duracao.count());
+            }
+        }
+
+        double soma = 0;
+        double melhor_caso = resultado_funcao[0];
+        double pior_caso = resultado_funcao[0];
+        for (int i = 0; i < resultado_funcao.size(); i++)
+        {
+            soma += resultado_funcao[i];
+
+            if (resultado_funcao[i] < melhor_caso)
+                melhor_caso = resultado_funcao[i];
+
+            if (resultado_funcao[i] > pior_caso)
+                pior_caso = resultado_funcao[i];
+        }
+
+        resultados[f][0] = melhor_caso;                             // Melhor caso
+        resultados[f][1] = soma / numero_execucoes * matriz.size(); // Media dos casos
+        resultados[f][2] = pior_caso;                               // Pior caso
+
+        cout << nome_funcoes[f] << " - OK" << endl;
     }
 }
 
 // Menu
 void menu()
 {
+    srand(time(NULL));
+
     int input_opcao, qtd_vetores, qtd_elementos, numero_execucao;
-    int **matriz = nullptr; // PS: Tera no minimio 3 vetores (um ordenado, um invertido e um aleatório)
-    double **resultados = nullptr;
+    vector<vector<int>> matriz; // PS: Tera no minimio 3 vetores (um ordenado, um invertido e um aleatório)
+    vector<vector<double>> resultados(6, vector<double>(3));
 
     do
     {
@@ -309,7 +405,7 @@ void menu()
             {
                 cout << "Digite a quantidade de vetores [3-" << __INT_MAX__ << "]: ";
                 cin >> qtd_vetores;
-            } while (qtd_vetores < 3 || qtd_elementos > __INT_MAX__);
+            } while (qtd_vetores < 3 || qtd_vetores > __INT_MAX__);
 
             do
             {
@@ -323,9 +419,11 @@ void menu()
                 cin >> numero_execucao;
             } while (numero_execucao < 1 || numero_execucao > __INT_MAX__);
 
-            matriz = preencher(qtd_vetores, qtd_elementos);
+            preencher(matriz, qtd_vetores, qtd_elementos);
 
             ordenar(resultados, matriz, qtd_vetores, qtd_elementos, numero_execucao);
+
+            exportar_para_csv("resultados", "funcao,melhor_caso,media_dos_casos,pior_caso", resultados);
 
             cin.ignore();
             cout << "Precione Enter tecla para continuar..." << endl;
