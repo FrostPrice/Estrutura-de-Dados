@@ -131,8 +131,10 @@ void selectionsort(int vetor[], int tam)
     {
         pos_menor = i;
         for (int j = i + 1; j < tam; j++)
+        {
             if (vetor[j] < vetor[pos_menor])
                 pos_menor = j;
+        }
         temp = vetor[i];
         vetor[i] = vetor[pos_menor];
         vetor[pos_menor] = temp;
@@ -142,7 +144,7 @@ void selectionsort(int vetor[], int tam)
 void merge(int vetor[], int comeco, int meio, int fim)
 {
     int com1 = comeco, com2 = meio + 1, comAux = 0, tam = fim - comeco + 1;
-    int *vetAux = new int[tam];
+    int vetAux[tam];
 
     while (com1 <= meio && com2 <= fim)
     {
@@ -177,8 +179,6 @@ void merge(int vetor[], int comeco, int meio, int fim)
     {
         vetor[comAux] = vetAux[comAux - comeco];
     }
-
-    delete[] vetAux;
 }
 
 void mergesort(int vetor[], int inicio, int fim)
@@ -285,9 +285,9 @@ void mostrar(vector<vector<T>> matriz) // Mostra a matriz
     cout << endl;
 }
 
-void deletar(vector<vector<int>> matriz, int qtd_vetores)
+void deletar(vector<vector<int>> &matriz, int qtd_vetores)
 {
-    matriz.clear(); // Limpa o vetor
+    matriz.clear(); // Deleta todos os elementos da matriz
 }
 
 void exportar_para_csv(string nome_do_arquivo, string cabecalho, vector<vector<double>> matriz)
@@ -341,12 +341,14 @@ void ordenar(vector<vector<double>> &resultados, vector<vector<int>> matriz, int
         [](vector<int> vetor)
         { mergesort(vetor); }};
 
-    for (int f = 0; f < funcoes.size(); f++)
+    resultados.resize(funcoes.size(), vector<double>(3));
+
+    for (int f = 0; f < funcoes.size(); f++) // Loop para chamar dinamicamenta as funcoes de ordenacao
     {
-        vector<double> resultado_funcao; // Tempo de execucao de todas as iteracoes da funcao atual
-        for (int i = 0; i < numero_execucoes; i++)
+        vector<double> resultado_funcao;           // Tempo de execucao de todas as iteracoes da funcao atual
+        for (int i = 0; i < numero_execucoes; i++) // Loop de numero de vezes que o codigo de ordenacao sera executado
         {
-            for (int j = 0; j < matriz.size(); j++)
+            for (int j = 0; j < matriz.size(); j++) // Loop dos vetores a serem passadas para a funcao de ordenacao
             {
                 chrono::high_resolution_clock::time_point inicio = chrono::high_resolution_clock::now();
 
@@ -373,12 +375,14 @@ void ordenar(vector<vector<double>> &resultados, vector<vector<int>> matriz, int
                 pior_caso = resultado_funcao[i];
         }
 
-        resultados[f][0] = melhor_caso;                             // Melhor caso
-        resultados[f][1] = soma / numero_execucoes * matriz.size(); // Media dos casos
-        resultados[f][2] = pior_caso;                               // Pior caso
+        resultados[f][0] = melhor_caso;                               // Melhor caso
+        resultados[f][1] = soma / (numero_execucoes * matriz.size()); // Media dos casos
+        resultados[f][2] = pior_caso;                                 // Pior caso
 
-        cout << nome_funcoes[f] << " - OK" << endl;
+        cout << nome_funcoes[f] << " - OK\n";
     }
+
+    cout << "...Algoritmos finalizados!\n";
 }
 
 // Menu
@@ -388,20 +392,17 @@ void menu()
 
     int input_opcao, qtd_vetores, qtd_elementos, numero_execucao;
     vector<vector<int>> matriz; // PS: Tera no minimio 3 vetores (um ordenado, um invertido e um aleatório)
-    vector<vector<double>> resultados(6, vector<double>(3));
+    vector<vector<double>> resultados;
 
     do
     {
         system("cls || clear"); // Limpa o terminal no windows ou linux
-        cout << "+-------------------------+\n"
-             << endl;
-        cout << "Comparando Algoritimos de Ordenacao\n"
-             << endl;
-        cout << "+-------------------------+"
-             << endl;
-        cout << "1. Iniciar" << endl;
-        cout << "2. Sair" << endl;
-        cout << "+-------------------------+" << endl;
+        cout << "+-------------------------+\n";
+        cout << "Comparando Algoritimos de Ordenacao\n";
+        cout << "+-------------------------+\n";
+        cout << "1. Iniciar\n";
+        cout << "2. Sair\n";
+        cout << "+-------------------------+\n";
         cout << "Opcao: ";
         cin >> input_opcao;
 
@@ -440,18 +441,18 @@ void menu()
             mostrar(resultados);
 
             cin.ignore();
-            cout << "Precione Enter tecla para continuar..." << endl;
+            cout << "Precione Enter tecla para continuar...\n";
             cin.get();
         }
         else if (input_opcao == 2)
         {
-            cout << "Saindo..." << endl;
+            cout << "Saindo...\n";
             deletar(matriz, qtd_vetores);
         }
         else
         {
-            cout << "Opcao invalida!" << endl;
-            cout << "Precione Enter tecla para continuar..." << endl;
+            cout << "Opcao invalida!\n";
+            cout << "Precione Enter tecla para continuar...\n";
             cin.ignore();
             cin.get();
         }
