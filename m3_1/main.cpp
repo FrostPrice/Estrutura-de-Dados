@@ -408,7 +408,7 @@ void menu()
 
         if (input_opcao == 1)
         {
-            deletar(matriz, qtd_vetores); // Remove qualquer lixo de memória existente dessa matriz
+            deletar(matriz); // Remove qualquer lixo de memória existente dessa matriz
 
             do
             {
@@ -447,7 +447,7 @@ void menu()
         else if (input_opcao == 2)
         {
             cout << "Saindo...\n";
-            deletar(matriz, qtd_vetores);
+            deletar(matriz);
         }
         else
         {
