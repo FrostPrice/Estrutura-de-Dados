@@ -285,7 +285,7 @@ void mostrar(vector<vector<T>> matriz) // Mostra a matriz
     cout << endl;
 }
 
-void deletar(vector<vector<int>> &matriz, int qtd_vetores)
+void deletar(vector<vector<int>> &matriz)
 {
     matriz.clear(); // Deleta todos os elementos da matriz
 }
